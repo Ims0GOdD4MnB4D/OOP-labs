@@ -6,4 +6,8 @@ public class PropertyNotFoundException extends Exception{
 
         super("Property not found");
     }
+
+    public PropertyNotFoundException(String message) {
+        super(message);
+    }
 }

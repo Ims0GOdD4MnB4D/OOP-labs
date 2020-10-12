@@ -10,6 +10,7 @@ public class InvalidFormatException extends Exception{
         super(msg);
     }
 
+
     public InvalidFormatException(Throwable cause) {
         super("Invalid format", cause);
     }

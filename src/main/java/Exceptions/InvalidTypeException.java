@@ -6,4 +6,8 @@ public class InvalidTypeException extends Exception{
 
         super("Invalid type of property value");
     }
+
+    public InvalidTypeException(String message) {
+        super(message);
+    }
 }

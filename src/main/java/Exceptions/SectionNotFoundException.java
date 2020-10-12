@@ -6,4 +6,8 @@ public class SectionNotFoundException extends Exception{
 
         super("Section not found");
     }
+
+    public SectionNotFoundException(String message) {
+        super(message);
+    }
 }
