@@ -9,21 +9,10 @@ import java.util.Objects;
 public class Property {
     private String key;
     private String val;
-    private ValueType valueType;
 
 
     public Property(String key, String val) throws InvalidTypeException {
         this.key = key;
-
-        if (val instanceof String)
-            valueType = ValueType.STRING;
-        else if (Double.class.isAssignableFrom(val.getClass()))
-            valueType = ValueType.DOUBLE;
-        else if (Integer.class.isAssignableFrom(val.getClass()))
-            valueType = ValueType.INT;
-        else
-            throw new InvalidTypeException();
-
         this.val = val;
     }
 
@@ -44,10 +33,6 @@ public class Property {
     }
 
 
-    public ValueType getType() {
-        return valueType;
-    }
-
     public Integer parseInt() {
 
         return Integer.parseInt(val);
@@ -58,23 +43,6 @@ public class Property {
         return Double.parseDouble(val);
     }
 
-    public ValueType tryParseInt() throws InvalidTypeException {
-
-        if(parseInt() instanceof Integer) {
-                return ValueType.INT;
-            }
-
-            throw new InvalidTypeException();
-    }
-
-    public ValueType tryParseDouble()  throws InvalidTypeException {
-
-        if(parseDouble() instanceof Double) {
-            return ValueType.DOUBLE;
-        }
-
-        throw new InvalidTypeException();
-    }
 
     public static Property createProperty(String key, String val) {
         try {
@@ -90,13 +58,12 @@ public class Property {
         if (o == null || getClass() != o.getClass()) return false;
         Property property = (Property) o;
         return key.equals(property.key) &&
-                val.equals(property.val) &&
-                valueType == property.valueType;
+                val.equals(property.val);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(key, val, valueType);
+        return Objects.hash(key, val);
     }
 
     @Override
@@ -104,7 +71,6 @@ public class Property {
         return "Property{" +
                 "key='" + key + '\'' +
                 ", val='" + val + '\'' +
-                ", valueType=" + valueType +
                 '}';
     }
 }

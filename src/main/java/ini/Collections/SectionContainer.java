@@ -22,10 +22,12 @@ public class SectionContainer {
         this(List.of(sections));
     }
 
-    public Section section(String name) throws SectionNotFoundException {
-        return Optional
-                .ofNullable(data.get(name))
-                .orElseThrow(SectionNotFoundException::new);
+    public Section section(String key) throws SectionNotFoundException {
+        try  {
+            return (data.get(key));
+        } catch (RuntimeException ex) {
+            throw new SectionNotFoundException();
+        }
     }
 
     public void addSection(Section section) {

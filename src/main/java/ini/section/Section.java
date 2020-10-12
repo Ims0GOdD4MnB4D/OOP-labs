@@ -2,7 +2,7 @@ package ini.section;
 
 import Exceptions.InvalidTypeException;
 import Exceptions.PropertyNotFoundException;
-import Exceptions.TypeMismatchException;
+import Exceptions.NonValidTypeException;
 import ini.ValueType;
 import ini.property.Property;
 
@@ -24,10 +24,12 @@ public class Section {
             List.of(properties).forEach(this::addProperty);
     }
 
-    public Optional<Property> getProperty(String key) {
-        return Optional.ofNullable(
-                data.get(key)
-        );
+    public Property getProperty(String key) throws PropertyNotFoundException {
+        try  {
+            return data.get(key);
+        } catch(RuntimeException ex) {
+            throw new PropertyNotFoundException();
+        }
     }
 
     public String getVal() {
@@ -46,45 +48,40 @@ public class Section {
         data.remove(key);
     }
 
-    public int getInt(String key) throws TypeMismatchException, PropertyNotFoundException {
-        Property property = getProperty(key)
-                .orElseThrow(PropertyNotFoundException::new);
+    public int getInt(String key) throws NonValidTypeException, PropertyNotFoundException {
 
-        if (property.getType().equals(ValueType.INT))
-            return Integer.parseInt(property.getVal());
-        else
-            throw new TypeMismatchException(ValueType.INT, property.getType());
+        Property property;
+        try  {
+            property = getProperty(key);
+        } catch (RuntimeException ex) {
+            throw new PropertyNotFoundException();
+        }
+        try {
+            return property.parseInt();
+        } catch (RuntimeException ex) {
+            throw new NonValidTypeException(ValueType.INT);
+        }
     }
 
-    public double getDouble(String key) throws TypeMismatchException, PropertyNotFoundException {
-        Property property = getProperty(key)
-                .orElseThrow(PropertyNotFoundException::new);
-
-        if (property.getType().equals(ValueType.DOUBLE))
-            return Double.parseDouble(property.getVal());
-        else if (property.getType().equals(ValueType.INT))
-            return Integer.parseInt(property.getVal());
-        else
-            throw new TypeMismatchException(ValueType.DOUBLE, property.getType());
+    public double getDouble(String key) throws NonValidTypeException, PropertyNotFoundException {
+        Property property;
+        try  {
+            property = getProperty(key);
+        } catch (RuntimeException ex) {
+            throw new PropertyNotFoundException();
+        }
+        try {
+            return property.parseDouble();
+        } catch (RuntimeException ex) {
+            throw new NonValidTypeException(ValueType.DOUBLE);
+        }
     }
-
     public String getString(String key) throws PropertyNotFoundException {
-        return getProperty(key)
-                .orElseThrow(PropertyNotFoundException::new)
-                .getVal()
-                .toString();
-    }
-
-    public Optional<Integer> tryGetInt(String key) {
-        return getProperty(key).map(Integer.class::cast);
-    }
-
-    public Optional<Double> tryGetDouble(String key) {
-        return getProperty(key).map(Double.class::cast);
-    }
-
-    public Optional<String> tryGetString(String key) {
-        return getProperty(key).map(Object::toString);
+        try {
+            return getProperty(key).getVal();
+        } catch (RuntimeException ex) {
+            throw new PropertyNotFoundException();
+        }
     }
 
     @Override
