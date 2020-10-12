@@ -17,7 +17,7 @@ import java.io.File;
 public class IniParser {
 
     private final String sectionReg = "\\[\\w+]";
-    private final String propertyReg = "\\w+\\s*=\\s*[\\w./]+";
+    private final String propertyReg = "\\w+\\s*=\\s*[\\w.,/]+";
 
     private final String commentReg = ";.*";
     private final String lineEndingReg = "\\s*(" + commentReg + ")?";
@@ -78,10 +78,10 @@ public class IniParser {
         }
     }
 
-    public SectionContainer parse(File file) throws FileNotFoundException, InvalidFormatException {
+    public SectionContainer parse(File file) throws FileNotFoundException, InvalidFormatException, ParserException {
         SectionContainer sectionContainer = new SectionContainer();
 
-        try (Scanner scanner = new Scanner(file)) {
+        Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 if (!scanner.hasNext(validLinePattern))
                     throw new InvalidFormatException();
@@ -94,14 +94,6 @@ public class IniParser {
                     scanner.nextLine();
             }
 
-        } catch (FileNotFoundException ex) {
-            throw ex;
-        }
-        catch (InvalidFormatException ex) {
-            throw new InvalidFormatException(ex);
-        } catch (ParserException e) {
-            e.printStackTrace();
-        }
 
         return sectionContainer;
     }

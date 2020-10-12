@@ -44,10 +44,6 @@ public class Section {
         data.put(property.getKey(), property);
     }
 
-    public void removeProperty(String key) {
-        data.remove(key);
-    }
-
     public int getInt(String key) throws NonValidTypeException, PropertyNotFoundException {
 
         Property property;

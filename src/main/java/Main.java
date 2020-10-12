@@ -31,8 +31,17 @@ public class Main {
                     (sectionContainer.
                             section("COMMON").
                                 getInt("StatisterTimeMs"));
-        } catch(FileNotFoundException ex) {
-            throw new FileNotFoundException();
+            System.out.println
+                    (sectionContainer.
+                            section("ADC_DEV").
+                                getString("Driver"));
+            System.out.println
+                    (sectionContainer.
+                            section("NCMD").
+                                getString("BufferLenSeconds"));
+        }
+        catch(Exception ex) {
+            throw new FileNotFoundException("File not found");
         }
     }
 }
