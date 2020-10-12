@@ -16,8 +16,6 @@ public class Property {
         this.val = val;
     }
 
-
-
     public void setKey(String key) {
         this.key = key;
     }
@@ -45,14 +43,6 @@ public class Property {
         return Double.parseDouble(val);
     }
 
-
-    public static Property createProperty(String key, String val) {
-        try {
-                return new Property(key, val);
-        } catch (InvalidTypeException ex) {
-            throw new RuntimeException("Cannot create property with key " + key);
-        }
-    }
 
     @Override
     public boolean equals(Object o) {
