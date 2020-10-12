@@ -1,7 +1,6 @@
 package ini.model;
 
 import Exceptions.InvalidFormatException;
-import Exceptions.InvalidTypeException;
 import Exceptions.ParserException;
 import ini.Collections.SectionContainer;
 import ini.property.Property;
@@ -20,15 +19,15 @@ public class IniParser {
     private final String propertyReg = "\\w+\\s*=\\s*[\\w./]+";
 
     private final String commentReg = ";.*";
-    private final String lineEndingRegEx = "\\s*(" + commentReg + ")?";
+    private final String lineEndingReg = "\\s*(" + commentReg + ")?";
 
     private final Pattern validLinePattern =
-            Pattern.compile("\\s*(" + sectionReg + "|" + propertyReg + ")?" + lineEndingRegEx);
+            Pattern.compile("\\s*(" + sectionReg + "|" + propertyReg + ")?" + lineEndingReg);
 
-    private final Pattern sectionNameStringPattern = Pattern.compile("\\s*" + sectionReg + lineEndingRegEx);
+    private final Pattern sectionNameStringPattern = Pattern.compile("\\s*" + sectionReg + lineEndingReg);
     private final Pattern sectionNamePattern = Pattern.compile(sectionReg);
 
-    private final Pattern propertyStringPattern = Pattern.compile("\\s*" + propertyReg + lineEndingRegEx);
+    private final Pattern propertyStringPattern = Pattern.compile("\\s*" + propertyReg + lineEndingReg);
 
     private Property parseProperty(String line) throws InvalidFormatException {
         if (!propertyStringPattern.matcher(line).matches())
@@ -106,14 +105,5 @@ public class IniParser {
         return sectionContainer;
     }
 
-    public boolean checkFileFormat(File file) throws FileNotFoundException {
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNextLine()) {
-                if (!validLinePattern.matcher(scanner.nextLine()).find())
-                    return false;
-            }
-        }
-        return true;
-    }
 
 }

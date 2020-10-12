@@ -34,7 +34,4 @@ public class SectionContainer {
         data.put(section.getVal(), section);
     }
 
-    public void removeSection(String name) {
-        data.remove(name);
-    }
 }
