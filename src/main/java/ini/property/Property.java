@@ -16,6 +16,8 @@ public class Property {
         this.val = val;
     }
 
+
+
     public void setKey(String key) {
         this.key = key;
     }

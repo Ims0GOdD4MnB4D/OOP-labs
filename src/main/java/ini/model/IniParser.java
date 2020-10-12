@@ -1,6 +1,7 @@
 package ini.model;
 
 import Exceptions.InvalidFormatException;
+import Exceptions.InvalidTypeException;
 import Exceptions.ParserException;
 import ini.Collections.SectionContainer;
 import ini.property.Property;
@@ -29,13 +30,13 @@ public class IniParser {
 
     private final Pattern propertyStringPattern = Pattern.compile("\\s*" + propertyReg + lineEndingReg);
 
-    private Property parseProperty(String line) throws InvalidFormatException {
+    private Property parseProperty(String line) throws InvalidFormatException, InvalidTypeException {
         if (!propertyStringPattern.matcher(line).matches())
             throw new InvalidFormatException();
 
         String property = line.replaceFirst(commentReg, "").trim();
 
-        return Property.createProperty(
+        return new Property(
                 property.split("=")[0].stripTrailing(),
                 property.split("=")[1].stripLeading()
         );
@@ -72,7 +73,7 @@ public class IniParser {
 
             return section;
 
-        } catch (NoSuchElementException ex) {
+        } catch (NoSuchElementException | InvalidTypeException ex) {
             throw new InvalidFormatException();
         }
     }
