@@ -2,7 +2,6 @@ package ini.property;
 
 
 import Exceptions.InvalidTypeException;
-import ini.ValueType;
 
 import java.util.Objects;
 

@@ -2,8 +2,6 @@ package Exceptions;
 
 import ini.ValueType;
 
-import java.lang.reflect.Type;
-
 public class NonValidTypeException extends Exception {
     public NonValidTypeException() {
     }
