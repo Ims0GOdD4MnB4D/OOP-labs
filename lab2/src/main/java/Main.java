@@ -1,9 +1,4 @@
-import module.Product;
-import module.Shop;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import model.Shop;
 
 public class Main {
     public static void main(String[] args) {

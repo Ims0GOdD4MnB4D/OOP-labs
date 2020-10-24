@@ -1,8 +1,8 @@
 package controller;
 
-import module.Product;
-import module.ProductPackage;
-import module.Shop;
+import model.Product;
+import model.ProductPackage;
+import model.Shop;
 
 import java.util.ArrayList;
 import java.util.Arrays;

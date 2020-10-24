@@ -1,6 +1,6 @@
 package collections;
 
-import module.Product;
+import model.Product;
 
 public class CustomPair {
         private Product key;
