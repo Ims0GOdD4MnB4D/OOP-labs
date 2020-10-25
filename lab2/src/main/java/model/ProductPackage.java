@@ -1,22 +1,15 @@
 package model;
 
-import collections.CustomPair;
+import collections.ProductQuantityPair;
 
 public class ProductPackage {
-    private CustomPair productPack;
+    private final ProductQuantityPair productPack;
 
     public ProductPackage(Product product, Integer productQuantity) {
-        productPack.setKey(product);
-        productPack.setValue(productQuantity);
+        productPack = new ProductQuantityPair(product, productQuantity);
     }
 
-    public ProductPackage(Product product, Integer quantity, Integer newPrice) {
-        productPack.setKey(product);
-        productPack.getKey().setProductPrice(newPrice);
-        productPack.setValue(quantity);
-    }
-
-    public ProductPackage(CustomPair productPack) {
+    public ProductPackage(ProductQuantityPair productPack) {
         this.productPack = productPack;
     }
 

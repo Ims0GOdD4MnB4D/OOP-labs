@@ -1,5 +1,9 @@
 package controller;
 
+import exceptions.NoSuchProductPackageFound;
+import exceptions.NoSuchShopFound;
+import exceptions.NotEnoughProductQuantity;
+import model.PricedProductPackage;
 import model.Product;
 import model.ProductPackage;
 import model.Shop;
@@ -9,65 +13,44 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ShopManager {
-    public Shop getTheCheapestPrice(Product product, Shop... sh) {
-        int resPrice = Integer.MAX_VALUE;
-        Shop ans = null;
-        for(Shop cur : sh) {
+    private final List<Shop> shopList;
+
+    public ShopManager() {
+        shopList = new ArrayList<>();
+    }
+
+    public ShopManager(Shop ... shops) {
+        shopList = Arrays.asList(shops);
+    }
+
+    public void addShop(Shop shop) {
+        shopList.add(shop);
+    }
+
+    public Shop getTheCheapestPrice(Product product) {
+        float resPrice = Integer.MAX_VALUE;
+        Shop resShop = null;
+        for(Shop cur : shopList) {
             if(cur.isContainProduct(product) && 
-                    cur.getProductByID(product).getProductPrice() <= resPrice) {
-                ans = cur;
-                resPrice = cur.getProductByID(product).getProductPrice();
+                    cur.getProductPackage(product).getProductPrice() <= resPrice) {
+                resShop = cur;
+                resPrice = cur.getProductPackage(product).getProductPrice();
             }
         }
         if(resPrice == Integer.MAX_VALUE)
             throw new RuntimeException();
-        return ans;
+        return resShop;
     }
 
-    public List<ProductPackage> getProductListByPrice(Shop sh, Integer money) {
-        List<ProductPackage> whatCanYouBuy= new ArrayList<>();
-        for(ProductPackage item : sh.getProductList()) {
-            if(item.getProduct().getProductPrice() < money) {
-                whatCanYouBuy.add(new ProductPackage(item.getProduct(),
-                        money/item.getProduct().getProductPrice()));
-            }
-        }
-        if(whatCanYouBuy.isEmpty())
-            whatCanYouBuy.add(new ProductPackage(new Product
-                    ("GTFO my propety, you fooking beggar", 0), 0));
-        return whatCanYouBuy;
-    }
-
-    public void buyProductPackage(Shop shop, ProductPackage ... productPackage) {
-        List<ProductPackage> productPackageList = Arrays.asList(productPackage);
-        boolean canBuy = false;
-        for(ProductPackage curPack : productPackageList)
-            if(shop.getProductList().contains(curPack) &&
-                    shop.containPackage(curPack).getQuantity() >= curPack.getQuantity()) {
-                canBuy = true;
-            }
-        if(canBuy) {
-            for(ProductPackage curPack : productPackageList)
-                if(shop.getProductList().contains(curPack) &&
-                        shop.containPackage(curPack).getQuantity() >= curPack.getQuantity()) {
-                    shop.containPackage(curPack).setProductQuantity(
-                            shop.containPackage(curPack).getQuantity() - curPack.getQuantity());
-                }
-        }
-        else
-            throw new RuntimeException();
-    }
-
-    public Shop getShopWithLeastCost(List<ProductPackage> productPackages, Shop... shops) {
-        List<Shop> shopList = Arrays.asList(shops);
+    public Shop getShopWithLeastCost(List<PricedProductPackage> productPackages) throws NoSuchShopFound {
         int resCost = Integer.MAX_VALUE;
         Shop resShop = null;
         for(Shop curShop : shopList) {
             int curCost = 0;
-            if(curShop.containsCollection(productPackages))
-                for(ProductPackage productPackage : curShop.getProductList())
+            if(curShop.containsProductPackageCollection(productPackages))
+                for(PricedProductPackage productPackage : curShop.getProductList())
                     if(productPackages.contains(productPackage)) {
-                       curCost += productPackage.getProduct().getProductPrice() * productPackage.getQuantity();
+                       curCost += productPackage.getProductPrice() * productPackage.getProductPackage().getQuantity();
                     }
             if(curCost <= resCost) {
                 resCost = curCost;
@@ -76,6 +59,6 @@ public class ShopManager {
         }
         if(resShop != null)
             return resShop;
-        throw new RuntimeException();
+        throw new NoSuchShopFound();
     }
 }

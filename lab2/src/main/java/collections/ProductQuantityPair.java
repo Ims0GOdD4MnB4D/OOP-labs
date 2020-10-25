@@ -2,12 +2,12 @@ package collections;
 
 import model.Product;
 
-public class CustomPair {
+public class ProductQuantityPair {
         private Product key;
         private Integer value;
 
 
-    public CustomPair(Product key, Integer value) {
+    public ProductQuantityPair(Product key, Integer value) {
         this.key = key;
         this.value = value;
     }
