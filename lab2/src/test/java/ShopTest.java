@@ -23,7 +23,7 @@ public class ShopTest {
     }
 
     @Test
-    public void getTheCheapestPriceTesting() throws InvalidProductQuantity, InvalidPrice {
+    public void getTheCheapestPriceTesting() throws InvalidProductQuantity, InvalidPrice, NoSuchProductFound {
         Product yeezyBoost = new Product("yeezy");
         Product airJordanLow = new Product("jordan");
         Product dunkTravis = new Product("travis");
@@ -53,7 +53,7 @@ public class ShopTest {
     }
 
     @Test
-    public void getShopWithLeastCostTesting() throws InvalidProductQuantity, InvalidPrice, NoSuchShopFound {
+    public void getShopWithLeastCostTesting() throws InvalidProductQuantity, InvalidPrice, NoSuchShopFound, NoSuchProductPackageFound {
         Shop centralDepartmentStore = new Shop("ЦУМ","Петровка ул., 2");
         Shop houseOfLeningradTrade = new Shop("ДЛТ", "Конюшенная ул., 21–23");
         Product yeezyBoost = new Product("yeezy");

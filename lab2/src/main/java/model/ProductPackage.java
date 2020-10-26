@@ -2,12 +2,11 @@ package model;
 
 import collections.ProductQuantityPair;
 
-import java.util.AbstractMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class ProductPackage {
     private final ProductQuantityPair productPack;
+
     public ProductPackage(Product product, Integer productQuantity) {
         productPack = new ProductQuantityPair(product, productQuantity);
     }

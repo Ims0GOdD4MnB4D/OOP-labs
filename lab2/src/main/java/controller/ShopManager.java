@@ -42,18 +42,12 @@ public class ShopManager {
         return resShop;
     }
 
-    public Shop getShopWithLeastCost(ProductPackage ... productPackages) throws NoSuchShopFound {
+    public Shop getShopWithLeastCost(ProductPackage ... productPackages) throws NoSuchShopFound, NoSuchProductPackageFound {
         List<ProductPackage> productPackageList = Arrays.asList(productPackages);
         int resCost = Integer.MAX_VALUE;
         Shop resShop = null;
         for(Shop curShop : shopList) {
-            int curCost = 0;
-            if(curShop.containsProductPackageCollection(productPackageList))
-                for(ProductPackage productPackage : productPackageList)
-                    if(curShop.containsProductPackage(productPackage)) {
-                       curCost += curShop.getProductPackage(productPackage).getProductPrice()
-                               * productPackage.getQuantity();
-                    }
+            int curCost = curShop.tryBuyPackage(productPackageList);
             if(curCost <= resCost) {
                 resCost = curCost;
                 resShop = curShop;

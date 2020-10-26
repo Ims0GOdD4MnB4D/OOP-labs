@@ -34,12 +34,6 @@ public class Shop {
         return this.productList;
     }
 
-    public void addProduct(ProductPackage productPackage, Integer productPrice) throws InvalidPrice {
-        if(productPrice < 0)
-            throw new InvalidPrice();
-        productList.add(new PricedProductPackage(productPackage, productPrice));
-    }
-
     public void addProduct(Product product, int price, Integer productQuantity) throws InvalidProductQuantity, InvalidPrice {
         if(price < 0)
             throw new InvalidPrice();
@@ -58,22 +52,6 @@ public class Shop {
             }
         }
         throw new NoSuchProductFound();
-    }
-
-    public void addPackage(PricedProductPackage newPack) throws InvalidPrice, InvalidProductQuantity {
-        if(newPack.getProductPrice() < 0)
-            throw new InvalidPrice();
-        if(newPack.getProductPackage().getQuantity() < 0)
-            throw new InvalidProductQuantity();
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPackage().getProduct().getProductID()
-                    == newPack.getProductPackage().getProduct().getProductID()) {
-                item.getProductPackage().setProductQuantity(
-                        item.getProductPackage().getQuantity() + newPack.getProductPackage().getQuantity());
-                return;
-            }
-        }
-        productList.add(newPack);
     }
 
     public List<ProductPackage> getProductListByPrice(Integer money) {
@@ -95,19 +73,24 @@ public class Shop {
             if(!isContainEnoughProducts(curPack)) {
                 throw new NotEnoughProductQuantity();
             }
-            getProductPackage(curPack).getProductPackage().setProductQuantity
-                    (getProductPackage(curPack).getProductPackage().getQuantity()
+            getProductPackage(curPack.getProduct()).getProductPackage().setProductQuantity
+                    (getProductPackage(curPack.getProduct()).getProductPackage().getQuantity()
                             - curPack.getQuantity());
         }
     }
 
-    public PricedProductPackage getProductPackageIfExists(ProductPackage productPackage) {
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPackage().getProduct().getProductID()
-                    == productPackage.getProduct().getProductID())
-                return item;
-        }
-        return null;
+    public int tryBuyPackage(List<ProductPackage> productPackageList) throws NoSuchProductPackageFound {
+        int curCost = 0;
+        if (containsProductPackageCollection(productPackageList))
+            for (ProductPackage productPackage : productPackageList)
+                if (isContainProduct(productPackage.getProduct())) {
+                    curCost += getProductPackage(productPackage.getProduct()).getProductPrice()
+                            * productPackage.getQuantity();
+                }
+        if(curCost != 0)
+            return curCost;
+        else
+            throw new NoSuchProductPackageFound();
     }
 
     public PricedProductPackage getProductPackage(Product product) {
@@ -118,75 +101,28 @@ public class Shop {
         return null;
     }
 
-    public PricedProductPackage getProductPackage(ProductPackage productPackage) {
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPackage().getProduct().getProductID()
-                    == productPackage.getProduct().getProductID())
-                return item;
-        }
-        return null;
-    }
-
-    public PricedProductPackage getProductPackage(PricedProductPackage productPackage) {
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPackage().getProduct().getProductID()
-                    == productPackage.getProductPackage().getProduct().getProductID())
-                return item;
-        }
-        return null;
-    }
-
-    public Product getProduct(ProductPackage productPackage) throws NoSuchProductPackageFound {
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPackage().getProduct().getProductID() == productPackage.getProduct().getProductID())
-                return item.getProductPackage().getProduct();
-        }
-        throw new NoSuchProductPackageFound();
-        //return null;
-    }
-
     public PricedProductPackage getPricedProductPackage(Product product) throws NoSuchShopFound {
         for(PricedProductPackage item : productList) {
             if(item.getProductPackage().getProduct().getProductID() == product.getProductID())
                 return item;
         }
         throw new NoSuchShopFound();
-        //return null;
     }
 
     public boolean containsProductPackageCollection(List<ProductPackage> productPackageList) {
         for(ProductPackage item : productPackageList) {
-            if(!isContainPackage(item))
+            if(!isContainProduct(item.getProduct()))
                 return false;
         }
         return true;
     }
 
-    public boolean containsProductPackage(ProductPackage productPackage) {
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPackage().getProduct().getProductID()
-                    == productPackage.getProduct().getProductID()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean isContainEnoughProducts(ProductPackage pricedProductPackage) throws NoSuchProductPackageFound{
-        if(!isContainPackage(pricedProductPackage)) {
+    public boolean isContainEnoughProducts(ProductPackage productPackage) throws NoSuchProductPackageFound{
+        if(!isContainProduct(productPackage.getProduct())) {
             throw new NoSuchProductPackageFound();
         }
-        return getProductPackage(pricedProductPackage).getProductPackage().getQuantity()
-                >= pricedProductPackage.getQuantity();
-    }
-
-    private boolean isContainPackage(ProductPackage pricedProductPackage) {
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPackage().getProduct().getProductID()
-                    == pricedProductPackage.getProduct().getProductID())
-                return true;
-        }
-        return false;
+        return getProductPackage(productPackage.getProduct()).getProductPackage().getQuantity()
+                >= productPackage.getQuantity();
     }
 
     public boolean isContainProduct(Product product) {
@@ -196,13 +132,6 @@ public class Shop {
         }
         return false;
     }
-
-    public Product getProductByID(Product product) {
-        if(isContainProduct(product))
-            return product;
-        return null;
-    }
-
 
     @Override
     public String toString() {

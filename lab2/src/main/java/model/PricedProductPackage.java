@@ -32,14 +32,14 @@ public class PricedProductPackage {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(pricedProductPackage);
+    }
+
+    @Override
     public String toString() {
         return "PricedProductPackage{" +
                 "pricedProductPackage=" + pricedProductPackage +
                 '}';
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(pricedProductPackage);
     }
 }
