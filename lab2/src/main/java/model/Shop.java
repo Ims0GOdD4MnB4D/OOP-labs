@@ -20,6 +20,10 @@ public class Shop {
         ++nextID;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public Shop(ArrayList<PricedProductPackage> productList) {
         this.productList = productList;
         shopID = nextID;
@@ -132,12 +136,22 @@ public class Shop {
         return null;
     }
 
-    public Product getProduct(ProductPackage productPackage) {
+    public Product getProduct(ProductPackage productPackage) throws NoSuchProductPackageFound {
         for(PricedProductPackage item : productList) {
             if(item.getProductPackage().getProduct().getProductID() == productPackage.getProduct().getProductID())
                 return item.getProductPackage().getProduct();
         }
-        return null;
+        throw new NoSuchProductPackageFound();
+        //return null;
+    }
+
+    public PricedProductPackage getPricedProductPackage(Product product) throws NoSuchShopFound {
+        for(PricedProductPackage item : productList) {
+            if(item.getProductPackage().getProduct().getProductID() == product.getProductID())
+                return item;
+        }
+        throw new NoSuchShopFound();
+        //return null;
     }
 
     public boolean containsProductPackageCollection(List<ProductPackage> productPackageList) {
