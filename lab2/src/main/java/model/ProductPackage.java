@@ -24,4 +24,11 @@ public class ProductPackage {
     public void setProductQuantity(Integer quantity) {
         productPack.setValue(quantity);
     }
+
+    @Override
+    public String toString() {
+        return "ProductPackage{" +
+                "productPack=" + productPack +
+                '}';
+    }
 }

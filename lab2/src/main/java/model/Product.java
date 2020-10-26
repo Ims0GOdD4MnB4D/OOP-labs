@@ -7,7 +7,7 @@ public class Product {
     private final int productID;
     private static int nextID = 0;
 
-    public Product(String name, int price) {
+    public Product(String name) {
         this.productName = name;
         productID = nextID;
         ++nextID;
@@ -29,5 +29,12 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(productName, productID);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productName='" + productName +
+                '}';
     }
 }

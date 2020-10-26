@@ -27,4 +27,12 @@ public class ProductPackagePricePair {
     public void setValue(Integer value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "ProductPackagePricePair{" +
+                "key=" + key +
+                ", value=" + value +
+                '}';
+    }
 }

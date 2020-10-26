@@ -9,8 +9,13 @@ public class Shop {
     private List<PricedProductPackage> productList = new ArrayList<>();
     private final int shopID;
     private static int nextID = 0;
+    private String name;
+    private String address;
 
-    public Shop() {
+
+    public Shop(String name, String address) {
+        this.name = name;
+        this.address = address;
         shopID = nextID;
         ++nextID;
     }
@@ -70,24 +75,25 @@ public class Shop {
     public List<ProductPackage> getProductListByPrice(Integer money) {
         List<ProductPackage> whatYouCanBuy= new ArrayList<>();
         for(PricedProductPackage item : productList) {
-            if(item.getProductPrice() < money) {
-                whatYouCanBuy.add(new ProductPackage(item.getProductPackage().getProduct(),
-                        (int) (money/item.getProductPrice())));
+            if(item.getProductPrice() < money && item.getProductPackage().getQuantity() != 0) {
+                    whatYouCanBuy.add(new ProductPackage(item.getProductPackage().getProduct(),
+                            Math.min((int) (money/item.getProductPrice()),
+                            item.getProductPackage().getQuantity())));
+                }
             }
-        }
         return whatYouCanBuy;
     }
 
-    public void buyProductPackage(PricedProductPackage ... pricedProductPackages)
+    public void buyProductPackage(ProductPackage ... productPackages)
             throws NoSuchProductPackageFound, NotEnoughProductQuantity {
-        List<PricedProductPackage> productPackageList = Arrays.asList(pricedProductPackages);
-        for(PricedProductPackage curPack : productPackageList) {
+        List<ProductPackage> productPackageList = Arrays.asList(productPackages);
+        for(ProductPackage curPack : productPackageList) {
             if(!isContainEnoughProducts(curPack)) {
                 throw new NotEnoughProductQuantity();
             }
             getProductPackage(curPack).getProductPackage().setProductQuantity
                     (getProductPackage(curPack).getProductPackage().getQuantity()
-                            - curPack.getProductPackage().getQuantity());
+                            - curPack.getQuantity());
         }
     }
 
@@ -134,27 +140,36 @@ public class Shop {
         return null;
     }
 
-    public boolean containsProductPackageCollection(List<PricedProductPackage> productPackageList) {
-        for(PricedProductPackage item : productPackageList) {
+    public boolean containsProductPackageCollection(List<ProductPackage> productPackageList) {
+        for(ProductPackage item : productPackageList) {
             if(!isContainPackage(item))
                 return false;
         }
         return true;
     }
 
-    public boolean isContainEnoughProducts(PricedProductPackage pricedProductPackage) throws NoSuchProductPackageFound{
+    public boolean containsProductPackage(ProductPackage productPackage) {
+        for(PricedProductPackage item : productList) {
+            if(item.getProductPackage().getProduct().getProductID()
+                    == productPackage.getProduct().getProductID()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isContainEnoughProducts(ProductPackage pricedProductPackage) throws NoSuchProductPackageFound{
         if(!isContainPackage(pricedProductPackage)) {
             throw new NoSuchProductPackageFound();
         }
         return getProductPackage(pricedProductPackage).getProductPackage().getQuantity()
-                >= pricedProductPackage.getProductPackage().getQuantity();
+                >= pricedProductPackage.getQuantity();
     }
 
-    private boolean isContainPackage(PricedProductPackage pricedProductPackage) {
+    private boolean isContainPackage(ProductPackage pricedProductPackage) {
         for(PricedProductPackage item : productList) {
             if(item.getProductPackage().getProduct().getProductID()
-                    == pricedProductPackage.getProductPackage().getProduct().getProductID()
-                && item.getProductPrice() == pricedProductPackage.getProductPrice())
+                    == pricedProductPackage.getProduct().getProductID())
                 return true;
         }
         return false;
@@ -177,8 +192,6 @@ public class Shop {
 
     @Override
     public String toString() {
-        return "Shop{" +
-                "productList=" + productList +
-                '}';
+        return name;
     }
 }
