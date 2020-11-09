@@ -10,8 +10,7 @@ import java.util.*;
 
 public class Race {
     private final float distance;
-    private final List <LandVehicle> landVehicles;
-    private final List <AirVehicle> airVehicles;
+    private final List <VehicleType> raceMembers = new ArrayList<>();
 
     public static class Builder {
         private float distance;
@@ -38,48 +37,30 @@ public class Race {
         }
     }
 
-    public Race(List <LandVehicle> landVehicleList, List <AirVehicle> airVehicleList, float distance) {
-        landVehicles = landVehicleList;
-        airVehicles = airVehicleList;
+    public Race(List<LandVehicle> landVehicleList, List<AirVehicle> airVehicleList, float distance) {
+        this.raceMembers.addAll(landVehicleList);
+        this.raceMembers.addAll(airVehicleList);
         this.distance = distance;
     }
 
     public VehicleType startRace() throws InvalidDistance {
         if(distance <= 0)
             throw new InvalidDistance();
-        if(!landVehicles.isEmpty() && !airVehicles.isEmpty())
+        if(!raceMembers.isEmpty())
             return commonRace();
-        if(!landVehicles.isEmpty())
-            return landVehicleRace();
-        if(!airVehicles.isEmpty())
-            return airVehicleRace();
         throw new NoVehiclesFound();
     }
 
     private VehicleType commonRace() {
-        VehicleType landWinner = Collections.min(landVehicles, Comparator.comparing
-                (LandVehicle -> LandVehicle.timeToPassTheDistance(distance)));
-        VehicleType airWinner = Collections.min(airVehicles, Comparator.comparing
-                (AirVehicle -> AirVehicle.timeToPassTheDistance(distance)));
-        return landWinner.timeToPassTheDistance(distance) < airWinner.timeToPassTheDistance(distance)
-                ? landWinner : airWinner;
-    }
-
-    private LandVehicle landVehicleRace() {
-        return Collections.min(landVehicles, Comparator.comparing
-                (LandVehicle -> LandVehicle.timeToPassTheDistance(distance)));
-    }
-
-    private AirVehicle airVehicleRace() {
-        return Collections.min(airVehicles, Comparator.comparing
-                (AirVehicle -> AirVehicle.timeToPassTheDistance(distance)));
+        return Collections.min(raceMembers, Comparator.comparing
+                (VehicleType -> VehicleType.timeToPassTheDistance(distance)));
     }
 
     @Override
     public String toString() {
         return "Race{" +
-                "landRace=" + landVehicles +
-                ", airRace=" + airVehicles +
+                "distance=" + distance +
+                ", raceMembers=" + raceMembers +
                 '}';
     }
 }
