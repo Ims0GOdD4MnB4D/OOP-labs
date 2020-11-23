@@ -20,7 +20,7 @@ public class RestorePointInfo {
     public String toString() {
         return "Restore Point with such files:\n" + fileList +
                 "\nid:" + rpId +
-                "and creation: " + creationTime +
-                "has been created.";
+                " and creation: " + creationTime +
+                "has been created.\n";
     }
 }

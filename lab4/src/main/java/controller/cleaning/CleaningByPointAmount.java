@@ -2,6 +2,8 @@ package controller.cleaning;
 
 import model.Backup.Backup;
 
+import java.util.stream.Collectors;
+
 public class CleaningByPointAmount implements AbstractCleaningAlgorithm {
     private final int rpAmount;
 
@@ -11,18 +13,17 @@ public class CleaningByPointAmount implements AbstractCleaningAlgorithm {
 
     @Override
     public void cleanByLimit(Backup backup) {
-        for(int i=backup.getRpList().size()-1; i>=0; --i) {
-            if (i + 1 > rpAmount)
-                backup.deleteRestorePoint(backup.getRpList().get(
-                        backup.getRpList().size() - i - 1).getRpId());
-            else
-                break;
+        while(isCleaningNeeded(backup)) {
+                backup.deleteRestorePoint
+                        (backup.getRpList().get(0).getRpId());
         }
-//        backup.getRpList().forEach(rp -> {
-//                if(backup.getRpList().indexOf(rp)
-//                        < backup.getRpList().size() - rpAmount + 1)
-//                    backup.deleteRestorePoint(rp.getRpId());
-//        });
+    }
+
+    @Override
+    public boolean isCleaningNeeded(Backup backup) {
+        if(backup.getRpList().isEmpty())
+            return false;
+        return backup.getRpList().size() > rpAmount;
     }
 }
 

@@ -11,16 +11,14 @@ public class CleaningBySize implements AbstractCleaningAlgorithm {
 
     @Override
     public void cleanByLimit(Backup backup) {
-        for(int i=backup.getRpList().size()-1; i>=0; --i) {
-            if (backup.getRestorePointsSize() >= maxSize)
-                backup.deleteRestorePoint(backup.getRpList().get(
-                        backup.getRpList().size() - i - 1).getRpId());
-            else
-                break;
+        while(isCleaningNeeded(backup)) {
+                backup.deleteRestorePoint(backup
+                        .getRpList().get(0).getRpId());
         }
-//            backup.getRpList().forEach(rp -> {
-//            if(backup.getBackupSize() > maxSize)
-//                backup.deleteRestorePoint(rp.getRpId());
-//        });
+    }
+
+    @Override
+    public boolean isCleaningNeeded(Backup backup) {
+        return backup.getRestorePointsSize() >= maxSize;
     }
 }

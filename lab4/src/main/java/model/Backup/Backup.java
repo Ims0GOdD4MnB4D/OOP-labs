@@ -1,8 +1,5 @@
 package model.Backup;
 
-import controller.cleaning.AbstractCleaningAlgorithm;
-import controller.creating.AbstractCreatingAlgorithm;
-import controller.hybrid.AbstractHybridAlgorithm;
 import exceptions.DirectoryEmptyException;
 import exceptions.DirectoryNotFoundException;
 import exceptions.FirstPointIncrementalException;
@@ -23,9 +20,6 @@ public class Backup implements AbstractBackup {
     private final List<RestorePointInfo> curRestorePoints;
     private final UUID backupId;
     private Integer restorePointsSize;
-    private AbstractCleaningAlgorithm cleaningAlgorithm;
-    private AbstractCreatingAlgorithm creatingAlgorithm;
-    private AbstractHybridAlgorithm hybridAlgorithm;
 
     public Backup(File dir) {
         if(!dir.exists())
@@ -46,8 +40,6 @@ public class Backup implements AbstractBackup {
         else
             addRestorePointIncremental(restorePoint);
         restorePointsSize += restorePoint.getRestorePointSize();
-        activateCleaningAlgorithm();
-        activateHybridAlgorithm();
     }
 
     public void addFile(File newFile) {
@@ -111,38 +103,11 @@ public class Backup implements AbstractBackup {
         }
     }
 
-    public void addCreatingAlgorithm(AbstractCreatingAlgorithm alg) {
-        creatingAlgorithm = alg;
-    }
-
-    public void addCleaningAlgorithm(AbstractCleaningAlgorithm alg) {
-        cleaningAlgorithm = alg;
-        activateCleaningAlgorithm();
-    }
-
-    public void addHybridCleaningAlgorithm(AbstractHybridAlgorithm alg) {
-        hybridAlgorithm = alg;
-        activateHybridAlgorithm();
-    }
-
-    public void activateCleaningAlgorithm() {
-        if(cleaningAlgorithm != null)
-            cleaningAlgorithm.cleanByLimit(this);
-    }
-
-    public void activateCreatingDefaultRPAlgorithm() {
-        if(creatingAlgorithm != null)
-            creatingAlgorithm.createRestorePointDefault(this);
-    }
-
-    public void activateCreatingIncrementalRPAlgorithm() {
-        if(creatingAlgorithm != null)
-            creatingAlgorithm.createRestorePointIncremental(this);
-    }
-
-    public void activateHybridAlgorithm() {
-        if(hybridAlgorithm != null)
-            hybridAlgorithm.hybridCleaningByLimits(this);
+    public void replacePoints(List<RestorePoint> newRpList) {
+        this.rpList.clear();
+        for(RestorePoint item : newRpList) {
+            addRestorePoint(item);
+        }
     }
 
     public List<RestorePointInfo> getCurRestorePoints() {

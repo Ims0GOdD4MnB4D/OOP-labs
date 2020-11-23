@@ -4,6 +4,7 @@ import model.Backup.Backup;
 import model.RestorePoint.RestorePoint;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 public class CleaningByDate implements AbstractCleaningAlgorithm {
     private final LocalDateTime outdatedPoints;
@@ -14,13 +15,16 @@ public class CleaningByDate implements AbstractCleaningAlgorithm {
 
     @Override
     public void cleanByLimit(Backup backup) {
-        for(int i=backup.getRpList().size()-1; i>=0; --i) {
-            if (backup.getRpList().get(i).getCreationTime().isBefore(outdatedPoints))
-                backup.deleteRestorePoint(backup.getRpList().get(i).getRpId());
-        }
-//        backup.getRpList().forEach(rp -> {
-//            if(rp.getCreationTime().isBefore(outdatedPoints))
-//                backup.deleteRestorePoint(rp.getRpId());
-//        });
+        while(isCleaningNeeded(backup)) {
+            backup.deleteRestorePoint(backup.getRpList().get(0).getRpId());
         }
     }
+
+    @Override
+    public boolean isCleaningNeeded(Backup backup) {
+        return backup.getRpList()
+                .get(0)
+                .getCreationTime()
+                .isBefore(outdatedPoints);
+    }
+}

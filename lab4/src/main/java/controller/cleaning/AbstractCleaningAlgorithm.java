@@ -4,4 +4,5 @@ import model.Backup.Backup;
 
 public interface AbstractCleaningAlgorithm {
     void cleanByLimit(Backup backup);
+    boolean isCleaningNeeded(Backup backup);
 }
