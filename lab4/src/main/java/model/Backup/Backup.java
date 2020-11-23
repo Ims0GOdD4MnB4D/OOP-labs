@@ -3,7 +3,6 @@ package model.Backup;
 import exceptions.DirectoryEmptyException;
 import exceptions.DirectoryNotFoundException;
 import exceptions.FirstPointIncrementalException;
-import exceptions.RemovingDependent;
 import model.RestorePoint.RestorePoint;
 import model.RestorePoint.RestorePointDefault;
 import model.RestorePoint.RestorePointIncremental;
@@ -68,7 +67,8 @@ public class Backup implements AbstractBackup {
         for(int i=rpList.size()-1; i>=0; --i) {
             if (rpList.get(i) instanceof RestorePointDefault) {
                 rpList.add(countDelta(restorePoint, rpList.get(i)));
-                ((RestorePointIncremental) rpList.get(rpList.size() - 1)).setPrevPoint(rpList.get(i));
+                ((RestorePointIncremental) rpList.get(rpList.size() - 1))
+                        .setDepPoint((RestorePointDefault) rpList.get(i));
                 ((RestorePointDefault) rpList.get(i)).incrementDependency();
                 break;
             }
@@ -89,6 +89,7 @@ public class Backup implements AbstractBackup {
             if(rpId.equals(item.getRpId())) {
                 if(item instanceof RestorePointIncremental) {
                     restorePointsSize -= item.getRestorePointSize();
+                    ((RestorePointIncremental) item).getDependent().decrementDependency();
                     rpList.remove(item);
                     return;
                 }
@@ -97,8 +98,6 @@ public class Backup implements AbstractBackup {
                     rpList.remove(item);
                     return;
                 }
-                else
-                    throw new RemovingDependent();
             }
         }
     }

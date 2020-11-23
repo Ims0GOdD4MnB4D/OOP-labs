@@ -1,10 +1,8 @@
-package controller.cleaning;
+package controller.cleaning.simpe_cleaning;
 
 import model.Backup.Backup;
 
-import java.util.stream.Collectors;
-
-public class CleaningByPointAmount implements AbstractCleaningAlgorithm {
+public class CleaningByPointAmount implements AbstractSimpleCleaningAlgorithm {
     private final int rpAmount;
 
     public CleaningByPointAmount(int rpAmount) {
@@ -12,7 +10,7 @@ public class CleaningByPointAmount implements AbstractCleaningAlgorithm {
     }
 
     @Override
-    public void cleanByLimit(Backup backup) {
+    public void clean(Backup backup) {
         while(isCleaningNeeded(backup)) {
                 backup.deleteRestorePoint
                         (backup.getRpList().get(0).getRpId());

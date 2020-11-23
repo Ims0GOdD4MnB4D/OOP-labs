@@ -1,8 +1,8 @@
-package controller.cleaning;
+package controller.cleaning.simpe_cleaning;
 
 import model.Backup.Backup;
 
-public class CleaningBySize implements AbstractCleaningAlgorithm {
+public class CleaningBySize implements AbstractSimpleCleaningAlgorithm {
     private final int maxSize;
 
     public CleaningBySize(int maxSize) {
@@ -10,7 +10,7 @@ public class CleaningBySize implements AbstractCleaningAlgorithm {
     }
 
     @Override
-    public void cleanByLimit(Backup backup) {
+    public void clean(Backup backup) {
         while(isCleaningNeeded(backup)) {
                 backup.deleteRestorePoint(backup
                         .getRpList().get(0).getRpId());

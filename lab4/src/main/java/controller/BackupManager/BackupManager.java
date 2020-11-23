@@ -1,30 +1,29 @@
 package controller.BackupManager;
 
 import controller.cleaning.AbstractCleaningAlgorithm;
+import controller.cleaning.simpe_cleaning.AbstractSimpleCleaningAlgorithm;
 import controller.creating.AbstractCreatingAlgorithm;
-import controller.hybrid.AbstractHybridAlgorithm;
+import controller.cleaning.hybrid.AbstractHybridAlgorithm;
 import model.Backup.Backup;
 
 public class BackupManager implements AbstractBackupManager{
-    Backup backup;
-    private AbstractCleaningAlgorithm cleaningAlgorithm;
+    private final Backup backup;
     private AbstractCreatingAlgorithm creatingAlgorithm;
-    private AbstractHybridAlgorithm hybridAlgorithm;
+    private AbstractCleaningAlgorithm cleaningAlgorithm;
 
     public BackupManager(Backup backup,
-                         AbstractCleaningAlgorithm cleaningAlgorithm,
                          AbstractCreatingAlgorithm creatingAlgorithm,
-                         AbstractHybridAlgorithm hybridAlgorithm) {
+                         AbstractCleaningAlgorithm cleaningAlgorithm) {
         this.backup = backup;
-        this.cleaningAlgorithm = cleaningAlgorithm;
         this.creatingAlgorithm = creatingAlgorithm;
-        this.hybridAlgorithm = hybridAlgorithm;
+        this.cleaningAlgorithm = cleaningAlgorithm;
     }
 
 
     public BackupManager(Backup backup) {
         this.backup = backup;
     }
+
 
     public BackupManager(Backup backup,
                          AbstractCleaningAlgorithm cleaningAlgorithm) {
@@ -38,11 +37,6 @@ public class BackupManager implements AbstractBackupManager{
         this.creatingAlgorithm = creatingAlgorithm;
     }
 
-    public BackupManager(Backup backup,
-                         AbstractHybridAlgorithm hybridAlgorithm) {
-        this.backup = backup;
-        this.hybridAlgorithm = hybridAlgorithm;
-    }
 
     public void addCreatingAlgorithm(AbstractCreatingAlgorithm alg) {
         creatingAlgorithm = alg;
@@ -53,14 +47,9 @@ public class BackupManager implements AbstractBackupManager{
         activateCleaningAlgorithm();
     }
 
-    public void addHybridCleaningAlgorithm(AbstractHybridAlgorithm alg) {
-        hybridAlgorithm = alg;
-        activateHybridAlgorithm();
-    }
-
     public void activateCleaningAlgorithm() {
         if(cleaningAlgorithm != null)
-            cleaningAlgorithm.cleanByLimit(backup);
+            cleaningAlgorithm.clean(backup);
     }
 
     public void activateCreatingDefaultRPAlgorithm() {
@@ -73,10 +62,6 @@ public class BackupManager implements AbstractBackupManager{
             creatingAlgorithm.createRestorePointIncremental(backup);
     }
 
-    public void activateHybridAlgorithm() {
-        if(hybridAlgorithm != null)
-            hybridAlgorithm.hybridCleaningByLimits(backup);
-    }
 
     public Backup getBackup() {
         return backup;

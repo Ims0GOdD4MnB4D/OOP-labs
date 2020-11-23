@@ -1,12 +1,10 @@
-package controller.cleaning;
+package controller.cleaning.simpe_cleaning;
 
 import model.Backup.Backup;
-import model.RestorePoint.RestorePoint;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
-public class CleaningByDate implements AbstractCleaningAlgorithm {
+public class CleaningByDate implements AbstractSimpleCleaningAlgorithm {
     private final LocalDateTime outdatedPoints;
 
     public CleaningByDate(LocalDateTime outdatedPoints) {
@@ -14,7 +12,7 @@ public class CleaningByDate implements AbstractCleaningAlgorithm {
     }
 
     @Override
-    public void cleanByLimit(Backup backup) {
+    public void clean(Backup backup) {
         while(isCleaningNeeded(backup)) {
             backup.deleteRestorePoint(backup.getRpList().get(0).getRpId());
         }

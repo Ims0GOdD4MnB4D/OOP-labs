@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.List;
 
 public class RestorePointIncremental extends RestorePoint {
-    private RestorePoint prevPoint;
+    private RestorePointDefault depPoint;
     public RestorePointIncremental(String directoryPath) {
         super(directoryPath);
     }
@@ -22,11 +22,11 @@ public class RestorePointIncremental extends RestorePoint {
         super(fileList);
     }
 
-    public void setPrevPoint(RestorePoint prevPoint) {
-        this.prevPoint = prevPoint;
+    public void setDepPoint(RestorePointDefault depPoint) {
+        this.depPoint = depPoint;
     }
 
-    public RestorePoint getPrevPoint() {
-        return prevPoint;
+    public RestorePointDefault getDependent() {
+        return depPoint;
     }
 }

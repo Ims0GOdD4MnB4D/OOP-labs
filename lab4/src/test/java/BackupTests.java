@@ -1,11 +1,9 @@
 import controller.BackupManager.BackupManager;
-import controller.cleaning.CleaningByPointAmount;
-import controller.cleaning.CleaningBySize;
-import controller.creating.CreatingArchiveStorage;
+import controller.cleaning.simpe_cleaning.CleaningByPointAmount;
+import controller.cleaning.simpe_cleaning.CleaningBySize;
 import controller.creating.CreatingFolderStorage;
-import controller.hybrid.HybridAtLeastOneLimit;
-import controller.hybrid.HybridEveryLimits;
-import exceptions.DirectoryNotFoundException;
+import controller.cleaning.hybrid.HybridAtLeastOneLimit;
+import controller.cleaning.hybrid.HybridEveryLimits;
 import exceptions.RemovingDependent;
 import model.Backup.Backup;
 import model.RestorePoint.RestorePoint;
@@ -73,11 +71,11 @@ public class BackupTests {
         backupManager.addCreatingAlgorithm(new CreatingFolderStorage());
         backupManager.activateCreatingDefaultRPAlgorithm();
         backupManager.activateCreatingDefaultRPAlgorithm();
-        backupManager.addHybridCleaningAlgorithm(new HybridEveryLimits(
+        backupManager.addCleaningAlgorithm(new HybridEveryLimits(
                 new CleaningBySize(250),
                 new CleaningByPointAmount(1)
         ));
-        backupManager.activateHybridAlgorithm();
+        backupManager.activateCleaningAlgorithm();
         int expected = 1;
         Assert.assertEquals(expected, backupManager.getBackup().getRpList().size());
     }
@@ -89,16 +87,16 @@ public class BackupTests {
         backupManager.addCreatingAlgorithm(new CreatingFolderStorage());
         backupManager.activateCreatingDefaultRPAlgorithm();
         backupManager.activateCreatingDefaultRPAlgorithm();
-        backupManager.addHybridCleaningAlgorithm(
+        backupManager.addCleaningAlgorithm(
                 new HybridAtLeastOneLimit(
                         new CleaningByPointAmount(1),
                         new CleaningBySize(150)));
-        backupManager.activateHybridAlgorithm();
+        backupManager.activateCleaningAlgorithm();
         int expected = 0;
         Assert.assertEquals(expected, backupManager.getBackup().getRpList().size());
     }
 
-    @Test(expected = RemovingDependent.class)
+    @Test
     public void test7() {
         BackupManager backupManager =
                 new BackupManager(new Backup(new File("src/main/resources/case 1")));
@@ -112,5 +110,7 @@ public class BackupTests {
         backupManager.activateCreatingIncrementalRPAlgorithm();
         backupManager.addCleaningAlgorithm(new CleaningByPointAmount(3));
         backupManager.activateCleaningAlgorithm();
+        int expected = 3;
+        Assert.assertEquals(expected, backupManager.getBackup().getRpList().size());
     }
 }
