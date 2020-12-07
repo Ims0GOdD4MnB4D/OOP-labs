@@ -24,7 +24,7 @@ public class BankTest {
                     .customerPassport(14881337)
                     .build();
             DebitAccount rockyAccount = new DebitAccount(rocky, 100000, 1.5);
-            DebitAccount travisAccount = new DebitAccount(travis, 100000, 1.25);
+            DebitAccount travisAccount = new DebitAccount(travis, 100000, 2.0);
             Bank mobBank = Bank.builder()
                     .commission(100)
                     .creditLimit(1000)
