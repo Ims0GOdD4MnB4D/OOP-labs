@@ -54,16 +54,26 @@ public class Bank implements AbstractBank {
         transactions.add(transaction);
     }
 
+    public void defineAccountValues(Account acc) {
+        if(acc instanceof DebitAccount)
+            ((DebitAccount)acc).setInterestRate(this.interestRate);
+        else if(acc instanceof DepositAccount)
+            ((DepositAccount) acc).setInterestRate(this.interestRate);
+        else if(acc instanceof CreditAccount) {
+            ((CreditAccount) acc).setCommission(this.commission);
+            ((CreditAccount) acc).setCreditLimit(this.creditLimit);
+        }
+    }
 
     @Override
     public void withdrawFromAcc(double moneyAmount, UUID id) {
         accounts.forEach(
                 acc -> {
                     if(acc.getAccountId().equals(id)) {
-                        if(acc.isClientReliable() && moneyAmount > operationsLimit)
+                        if(!acc.isClientReliable() && moneyAmount > operationsLimit)
                             return;
                         acc.withdrawMoney(moneyAmount);
-                        transactions.add(Transaction.builder().fromAcc(acc).build());
+                        addTransaction(Transaction.builder().fromAcc(acc).build());
                     }
                 }
         );
@@ -74,13 +84,19 @@ public class Bank implements AbstractBank {
         accounts.forEach(
                 acc -> {
                     if(acc.getAccountId().equals(id)) {
-                        if(acc.isClientReliable() && moneyAmount > operationsLimit)
+                        if(!acc.isClientReliable() && moneyAmount > operationsLimit)
                             return;
                         acc.addMoney(moneyAmount);
-                        transactions.add(Transaction.builder().toAcc(acc).build());
+                        addTransaction(Transaction.builder().toAcc(acc).build());
                     }
                 }
         );
+    }
+
+    public void transferToAnotherAccount(double moneyAmount, UUID from, UUID to) {
+        addToAcc(moneyAmount, to);
+        withdrawFromAcc(moneyAmount, from);;
+        addTransaction(new Transaction(findAccById(from), findAccById(to), moneyAmount));
     }
 
     @Override
@@ -96,10 +112,11 @@ public class Bank implements AbstractBank {
 
     public Account findAccById(UUID id) {
         //TODO: switch to lambda
-        for(Account item : accounts)
-            if(item.getAccountId().equals(id))
-                return item;
-        throw new AccountNotFoundException();
+        return accounts.stream()
+                .filter(
+                        item -> item.getAccountId().equals(id))
+                .findFirst()
+                .orElseThrow(AccountNotFoundException::new);
     }
 
     public boolean accExists(UUID id) {

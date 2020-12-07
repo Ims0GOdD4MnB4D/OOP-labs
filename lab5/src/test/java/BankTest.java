@@ -1,4 +1,6 @@
 import controller.BankManager;
+import exception.OutOfCreditLimitException;
+import model.account.CreditAccount;
 import model.account.DebitAccount;
 import model.account.DepositAccount;
 import model.bank.Bank;
@@ -68,7 +70,51 @@ public class BankTest {
                 expected += (expected + rockyAccount.getBalance())
                         * rockyAccount.getInterestRate()/100/365;
             expected += rockyAccount.getBalance();
-            rockyAccount.setCurTime(rockyAccount.getTerm().plusMonths(1).plusDays(1));
+            rockyAccount.setCurTime(rockyAccount.getTerm().plusDays(32));
             Assert.assertEquals(expected, rockyAccount.getBalance(), 0);
         }
+
+        @Test
+        public void test3() {
+            Client rocky = Client.builder().
+                    requiredInfo(new MutablePair<>("Rakim", "Mayers"))
+                    .address("NY, Midtown Manhattan")
+                    .customerPassport(1234567)
+                    .build();
+            DepositAccount rockyDeposit = new DepositAccount(rocky, 100000, LocalDateTime.now());
+            DebitAccount rockyDebit = new DebitAccount(rocky, 10000, 2.5);
+            Bank mobBank = Bank.builder()
+                    .commission(100)
+                    .creditLimit(1000)
+                    .interestRate(2.5)
+                    .operationsLimit(1000)
+                    .build();
+            mobBank.addAccount(rockyDebit);
+            mobBank.addAccount(rockyDeposit);
+            mobBank.transferToAnotherAccount(
+                    5000, rockyDebit.getAccountId(), rockyDeposit.getAccountId());
+            Pair<Double, Double> expected = new MutablePair<>(5000.0, 105000.0);
+            Pair<Double, Double> actual =
+                    new MutablePair<>(rockyDebit.getBalance(), rockyDeposit.getBalance());
+            Assert.assertEquals(expected, actual);
+        }
+
+        @Test(expected = OutOfCreditLimitException.class)
+        public void test4() {
+            Client rocky = Client.builder().
+                    requiredInfo(new MutablePair<>("Rakim", "Mayers"))
+                    .address("NY, Midtown Manhattan")
+                    .customerPassport(1234567)
+                    .build();
+            CreditAccount rockyCredit = new CreditAccount(rocky, 0, 5000, 100);
+            Bank mobBank = Bank.builder()
+                    .commission(100)
+                    .creditLimit(1000)
+                    .interestRate(2.5)
+                    .operationsLimit(1000)
+                    .build();
+            mobBank.addAccount(rockyCredit);
+            mobBank.withdrawFromAcc(10000, rockyCredit.getAccountId());
+        }
+
     }

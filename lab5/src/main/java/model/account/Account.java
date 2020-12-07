@@ -22,7 +22,7 @@ public abstract class Account implements AbstractAccount {
         this.client = client;
         this.balance = moneyAmount;
         curTime = LocalDateTime.now();
-        accountId = new UUID(Integer.MAX_VALUE, 0);
+        accountId = UUID.randomUUID();
     }
 
     public void Undo(double moneyAmount) {

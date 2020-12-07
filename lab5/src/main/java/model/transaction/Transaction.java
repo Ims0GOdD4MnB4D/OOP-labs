@@ -19,7 +19,7 @@ public class Transaction implements AbstractTransaction {
     public Transaction(Account fromAcc, Account toAcc, double moneyAmount) {
         this.transDate = LocalDateTime.now();
         this.moneyAmount = moneyAmount;
-        this.transferId = new UUID(Integer.MAX_VALUE, 0);
+        this.transferId = UUID.randomUUID();
         this.fromAcc = fromAcc;
         this.toAcc = toAcc;
     }

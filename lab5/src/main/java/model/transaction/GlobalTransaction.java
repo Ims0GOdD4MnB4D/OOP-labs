@@ -18,7 +18,7 @@ public class GlobalTransaction extends Transaction{
     @Override
     public void cancelTransaction() {
         fromBank.findAccById(fromAcc.getAccountId()).Undo(moneyAmount);
-        toBank.findAccById(fromAcc.getAccountId()).Undo(-moneyAmount);
+        toBank.findAccById(toAcc.getAccountId()).Undo(-moneyAmount);
     }
 
 }
