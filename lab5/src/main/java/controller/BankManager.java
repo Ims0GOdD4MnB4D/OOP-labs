@@ -1,5 +1,6 @@
 package controller;
 
+import exception.AccountNotFoundException;
 import exception.BankNotFoundException;
 import lombok.Getter;
 import model.bank.Bank;
@@ -36,7 +37,12 @@ public class BankManager implements AbstractBankManager {
 
     @Override
     public void transfer(UUID fromBank, UUID toBank, double moneyAmount) {
+        if(!banks.contains(bankByAccId(fromBank))
+                || !banks.contains(bankByAccId(toBank))) {
+            throw new AccountNotFoundException();
+        }
         banks.forEach(bank -> {
+            //Verification is carried out using by UUID so no 'find' methods valid here
             if(bank.accExists(fromBank)) {
                 bank.findAccById(fromBank).withdrawMoney(moneyAmount);
             }

@@ -31,8 +31,8 @@ public class Bank implements AbstractBank {
     public Bank(List<Account> accountList,
                 List<Transaction> transactionList,
                 double interestRate, double commission, int creditLimit, double operationsLimit) {
-        if(accountList != null)
-            for (Account account : accountList) defineAccountValues(account);
+//        if(accountList != null)
+//            for (Account account : accountList) defineAccountValues(account);
         this.interestRate = interestRate;
         this.commission = commission;
         this.creditLimit = creditLimit;
@@ -54,16 +54,16 @@ public class Bank implements AbstractBank {
         transactions.add(transaction);
     }
 
-    public void defineAccountValues(Account acc) {
-        if(acc instanceof DebitAccount)
-            ((DebitAccount)acc).setInterestRate(this.interestRate);
-        else if(acc instanceof DepositAccount)
-            ((DepositAccount) acc).setInterestRate(this.interestRate);
-        else if(acc instanceof CreditAccount) {
-            ((CreditAccount) acc).setCommission(this.commission);
-            ((CreditAccount) acc).setCreditLimit(this.creditLimit);
-        }
-    }
+//    public void defineAccountValues(Account acc) {
+//        if(acc instanceof DebitAccount)
+//            ((DebitAccount)acc).setInterestRate(this.interestRate);
+//        else if(acc instanceof DepositAccount)
+//            ((DepositAccount) acc).setInterestRate(this.interestRate);
+//        else if(acc instanceof CreditAccount) {
+//            ((CreditAccount) acc).setCommission(this.commission);
+//            ((CreditAccount) acc).setCreditLimit(this.creditLimit);
+//        }
+//    }
 
     @Override
     public void withdrawFromAcc(double moneyAmount, UUID id) {

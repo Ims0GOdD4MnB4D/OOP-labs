@@ -3,14 +3,14 @@ package model.client;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.UUID;
 
 @Getter
 public class Client implements AbstractClient {
 
-    Pair<String, String> requiredInfo;
+    String name;
+    String surname;
     private final UUID clientId;
     @Setter
     private String address;
@@ -18,8 +18,9 @@ public class Client implements AbstractClient {
     private Integer customerPassport;
 
     @Builder
-    public Client(Pair<String, String> requiredInfo, String address, Integer customerPassport) {
-        this.requiredInfo = requiredInfo;
+    public Client(String name, String surname, String address, Integer customerPassport) {
+        this.name = name;
+        this.surname = surname;
         this.address = address;
         this.customerPassport = customerPassport;
         this.clientId = new UUID(Integer.MAX_VALUE, 0);

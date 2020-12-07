@@ -1,5 +1,6 @@
 package model.transaction;
 
 public interface AbstractTransaction {
-    void cancelTransaction();
+    void cancelTopUpTransaction();
+    void cancelWithdrawingTransaction();
 }

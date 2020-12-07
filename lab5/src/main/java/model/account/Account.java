@@ -25,7 +25,7 @@ public abstract class Account implements AbstractAccount {
         accountId = UUID.randomUUID();
     }
 
-    public void Undo(double moneyAmount) {
+    public void UndoTransaction(double moneyAmount) {
         balance += moneyAmount;
     }
 

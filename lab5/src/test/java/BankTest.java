@@ -15,13 +15,15 @@ import java.time.LocalDateTime;
 public class BankTest {
         @Test
         public void test1() {
-            Client rocky = Client.builder().
-                    requiredInfo(new MutablePair<>("Rakim", "Mayers"))
+            Client rocky = Client.builder()
+                    .name("Rakim")
+                    .surname("Mayers")
                     .address("NY, Midtown Manhattan")
                     .customerPassport(1234567)
                     .build();
             Client travis = Client.builder()
-                    .requiredInfo(new MutablePair<>("Jacques", "Webster ||"))
+                    .name("Jacques")
+                    .surname("Webster ||")
                     .address("Beverly Hills, CA")
                     .customerPassport(14881337)
                     .build();
@@ -52,8 +54,9 @@ public class BankTest {
 
         @Test
         public void test2() {
-            Client rocky = Client.builder().
-                    requiredInfo(new MutablePair<>("Rakim", "Mayers"))
+            Client rocky = Client.builder()
+                    .name("Rakim")
+                    .surname("Mayers")
                     .address("NY, Midtown Manhattan")
                     .customerPassport(1234567)
                     .build();
@@ -76,8 +79,9 @@ public class BankTest {
 
         @Test
         public void test3() {
-            Client rocky = Client.builder().
-                    requiredInfo(new MutablePair<>("Rakim", "Mayers"))
+            Client rocky = Client.builder()
+                    .name("Rakim")
+                    .surname("Mayers")
                     .address("NY, Midtown Manhattan")
                     .customerPassport(1234567)
                     .build();
@@ -101,8 +105,9 @@ public class BankTest {
 
         @Test(expected = OutOfCreditLimitException.class)
         public void test4() {
-            Client rocky = Client.builder().
-                    requiredInfo(new MutablePair<>("Rakim", "Mayers"))
+            Client rocky = Client.builder()
+                    .name("Rakim")
+                    .surname("Mayers")
                     .address("NY, Midtown Manhattan")
                     .customerPassport(1234567)
                     .build();

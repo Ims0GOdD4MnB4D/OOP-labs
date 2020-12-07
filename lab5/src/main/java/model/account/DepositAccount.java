@@ -11,8 +11,7 @@ import java.time.temporal.ChronoUnit;
 
 @Getter
 public class DepositAccount extends Account {
-    @Setter
-    private double interestRate;
+    private final double interestRate;
     private double remainder = 0;
     @Setter
     private LocalDateTime term;
@@ -20,7 +19,12 @@ public class DepositAccount extends Account {
     public DepositAccount(Client client, int money, LocalDateTime term) {
         super(client, money);
         this.term = term;
-        refreshInterest();
+        if(balance < 50000)
+            interestRate = 3.0;
+        else if(balance <= 100000)
+            interestRate = 3.5;
+        else
+            interestRate = 4.0;
     }
 
     @Override
@@ -53,7 +57,6 @@ public class DepositAccount extends Account {
 
     private void refreshBalance() {
         long daysRemainder = ChronoUnit.DAYS.between(LocalDateTime.now(), curTime);
-        refreshInterest();
         if(daysRemainder == 0)
             return;
         for(int i=0; i<daysRemainder; ++i) {
@@ -64,15 +67,6 @@ public class DepositAccount extends Account {
             remainder = 0;
         }
         curTime = LocalDateTime.now();
-    }
-
-    private void refreshInterest() {
-        if(balance < 50000)
-            interestRate = 3.0;
-        else if(balance <= 100000)
-            interestRate = 3.5;
-        else
-            interestRate = 4.0;
     }
 
     private boolean isWithdrawAvailable() {

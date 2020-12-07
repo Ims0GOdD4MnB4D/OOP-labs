@@ -25,12 +25,12 @@ public class Transaction implements AbstractTransaction {
     }
 
     @Override
-    public void cancelTransaction() {
-        if(fromAcc != null && toAcc != null) {
-            fromAcc.Undo(moneyAmount);
-            toAcc.Undo(-moneyAmount);
-        }
-        else if(fromAcc != null)
-            fromAcc.Undo(moneyAmount);
+    public void cancelTopUpTransaction() {
+        toAcc.UndoTransaction(-moneyAmount);
+    }
+
+    @Override
+    public void cancelWithdrawingTransaction() {
+        fromAcc.UndoTransaction(moneyAmount);
     }
 }
