@@ -31,8 +31,8 @@ public class Bank implements AbstractBank {
     public Bank(List<Account> accountList,
                 List<Transaction> transactionList,
                 double interestRate, double commission, int creditLimit, double operationsLimit) {
-//        if(accountList != null)
-//            for (Account account : accountList) defineAccountValues(account);
+        if(accountList != null)
+            for (Account account : accountList) defineAccountValues(account);
         this.interestRate = interestRate;
         this.commission = commission;
         this.creditLimit = creditLimit;
@@ -105,13 +105,13 @@ public class Bank implements AbstractBank {
                 transfer -> {
                     if(transfer.getTransferId().equals(transferId)) {
                         cancelTransaction(transferId);
+                        transactions.remove(transfer);
                     }
                 }
         );
     }
 
     public Account findAccById(UUID id) {
-        //TODO: switch to lambda
         return accounts.stream()
                 .filter(
                         item -> item.getAccountId().equals(id))

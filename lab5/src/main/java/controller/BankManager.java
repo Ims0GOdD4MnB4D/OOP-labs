@@ -2,14 +2,12 @@ package controller;
 
 import exception.BankNotFoundException;
 import lombok.Getter;
-import model.account.Account;
 import model.bank.Bank;
 import model.transaction.GlobalTransaction;
-import model.transaction.Transaction;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.UUID;
 
 @Getter
@@ -17,9 +15,6 @@ public class BankManager implements AbstractBankManager {
     private List<Bank> banks = new ArrayList<>();
     private final List<GlobalTransaction> transactions = new ArrayList<>();
 
-    public BankManager() {
-
-    }
     public BankManager(List <Bank> banks) {
         this.banks.addAll(banks);
     }
@@ -39,6 +34,7 @@ public class BankManager implements AbstractBankManager {
         throw new BankNotFoundException();
     }
 
+    @Override
     public void transfer(UUID fromBank, UUID toBank, double moneyAmount) {
         banks.forEach(bank -> {
             if(bank.accExists(fromBank)) {
@@ -47,7 +43,6 @@ public class BankManager implements AbstractBankManager {
             if(bank.accExists(toBank)) {
                 bank.findAccById(toBank).addMoney(moneyAmount);
             }
-
         });
         transactions.add(new GlobalTransaction(bankByAccId(fromBank).findAccById(fromBank),
                 bankByAccId(toBank).findAccById(toBank),
@@ -56,13 +51,13 @@ public class BankManager implements AbstractBankManager {
                 bankByAccId(toBank)));
     }
 
+    @Override
     public void cancelTransaction(UUID transferId) {
-        transactions.forEach(
-                transfer -> {
-                    if(transfer.getTransferId().equals(transferId)) {
-                        transfer.cancelTransaction();
-                    }
-                }
-        );
+        for(int i=0; i<transactions.size(); ++i) {
+            if(transactions.get(i).getTransferId().equals(transferId)) {
+                transactions.get(i).cancelTransaction();
+                transactions.remove(transactions.get(i));
+            }
+        }
     }
 }
