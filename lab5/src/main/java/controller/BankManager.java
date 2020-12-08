@@ -41,6 +41,7 @@ public class BankManager implements AbstractBankManager {
                 || !banks.contains(bankByAccId(toBank))) {
             throw new AccountNotFoundException();
         }
+        
         banks.forEach(bank -> {
             //Verification is carried out using by UUID so no 'find' methods valid here
             if(bank.accExists(fromBank)) {

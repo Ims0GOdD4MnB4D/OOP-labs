@@ -29,6 +29,7 @@ public class RaceTests {
         Race race = new Race.Builder()
                 .distance(100)
                 .build();
+                
         System.out.println(race.startRace());
     }
 

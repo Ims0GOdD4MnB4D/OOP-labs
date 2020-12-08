@@ -1,13 +1,9 @@
 package Exceptions;
 
-public class InvalidTypeException extends Exception{
+
+public class InvalidTypeException extends RuntimeException{
 
     public InvalidTypeException() {
-
-        super("Invalid type of property value");
-    }
-
-    public InvalidTypeException(String message) {
-        super(message);
+        super("Invalid value type");
     }
 }

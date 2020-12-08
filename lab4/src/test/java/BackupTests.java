@@ -75,6 +75,7 @@ public class BackupTests {
                 new CleaningBySize(250),
                 new CleaningByPointAmount(1)
         ));
+        
         backupManager.activateCleaningAlgorithm();
         int expected = 1;
         Assert.assertEquals(expected, backupManager.getBackup().getRpList().size());
