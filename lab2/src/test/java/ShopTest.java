@@ -37,6 +37,7 @@ public class ShopTest {
         ShopManager manager = new ShopManager(centralDepartmentStore, houseOfLeningradTrade);
         String expected = "ДЛТ";
         String actual = manager.getTheCheapestPrice(yeezyBoost).getName();
+        
         Assert.assertEquals(expected, actual);
     }
 

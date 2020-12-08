@@ -1,37 +1,32 @@
 package ini.Collections;
 
-import Exceptions.SectionNotFoundException;
 import ini.section.Section;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SectionContainer {
 
-    private final Map<String, Section> data = new LinkedHashMap<>();
+    private Map<String, Section> value = new HashMap<>();
 
     public SectionContainer(Collection<Section> sections) {
-        sections.forEach(section -> data.put(section.getVal(), section));
+        for(var item : sections) {
+            value.put(item.getVal(), item);
+        }
     }
-
-    public Map<String, Section> getData() {
-        return data;
-    }
-
 
     public SectionContainer(Section ... sections) {
         this(List.of(sections));
     }
 
-    public Section section(String key) throws SectionNotFoundException {
-        try  {
-            return (data.get(key));
-        } catch (RuntimeException ex) {
-            throw new SectionNotFoundException();
-        }
+    public Section section(String key) {
+            return (value.get(key));
     }
 
     public void addSection(Section section) {
-        data.put(section.getVal(), section);
+        value.put(section.getVal(), section);
     }
 
 }

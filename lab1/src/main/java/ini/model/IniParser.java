@@ -2,101 +2,65 @@ package ini.model;
 
 import Exceptions.InvalidFormatException;
 import Exceptions.InvalidTypeException;
-import Exceptions.ParserException;
 import ini.Collections.SectionContainer;
-import ini.property.Property;
+import ini.key.Key;
 import ini.section.Section;
 
 import java.io.FileNotFoundException;
-import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Scanner;
 import java.io.File;
 
 public class IniParser {
 
-    private final String sectionReg = "\\[\\w+]";
-    private final String propertyReg = "\\w+\\s*=\\s*[\\w.,/]+";
+    private Pattern sectionReg =
+                        Pattern.compile("\\s*" + "\\[[a-zA-Z_]*]\\s*" + "\\s*(" + ";.*" + ")?");
+    private Pattern sectionNameReg =
+                        Pattern.compile("\\[[a-zA-Z_]*]\\s*");
 
-    private final String commentReg = ";.*";
-    private final String lineEndingReg = "\\s*(" + commentReg + ")?";
+    private Pattern keyReg = Pattern.compile("\\s*" + "\\w+\\s*=\\s*[\\w.,/]+"
+                                        + "\\s*(" + ";.*" + ")?");
 
-    private final Pattern validLinePattern =
-            Pattern.compile("\\s*(" + sectionReg + "|" + propertyReg + ")?" + lineEndingReg);
-
-    private final Pattern sectionNameStringPattern = Pattern.compile("\\s*" + sectionReg + lineEndingReg);
-    private final Pattern sectionNamePattern = Pattern.compile(sectionReg);
-
-    private final Pattern propertyStringPattern = Pattern.compile("\\s*" + propertyReg + lineEndingReg);
-
-    private Property parseProperty(String line) throws InvalidFormatException, InvalidTypeException {
-        if (!propertyStringPattern.matcher(line).matches())
+    public Key parseKey(String line) throws InvalidFormatException, InvalidTypeException {
+        if (!keyReg.matcher(line).matches())
             throw new InvalidFormatException();
 
-        String property = line.replaceFirst(commentReg, "").trim();
+        String str = line.replaceFirst(";.*", "").trim();
 
-        return new Property(
-                property.split("=")[0].stripTrailing(),
-                property.split("=")[1].stripLeading()
-        );
+        Key key = new Key(str.split("=")[0].stripTrailing(),
+                        str.split("=")[1].stripLeading());
+
+        return key;
     }
 
-    private Section parseNextSection(Scanner scanner) throws InvalidFormatException {
-        try {
-            if (!scanner.hasNextLine() || !scanner.hasNext(sectionNameStringPattern))
-                throw new InvalidFormatException();
+    public Section parseSec(Scanner opr) {
 
-            String sectionNameString = scanner.next(sectionNameStringPattern);
+            String secNameString = opr.next(sectionReg);
 
-            Matcher matcher = sectionNamePattern.matcher(sectionNameString);
-            if (!matcher.find())
-                throw new InvalidFormatException("Line " + sectionNameString + " does not have section name");
+            Section refreshedSec = new Section(secNameString);
 
-            String sectionName = sectionNameString.substring(
-                    matcher.start() + 1,
-                    matcher.end() - 1
-            ).trim();
+            while (!opr.hasNext(sectionReg) && opr.hasNextLine()) {
+                String line = opr.nextLine();
 
-            Section section = new Section(sectionName);
-
-            while (!scanner.hasNext(sectionNameStringPattern) && scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-
-                if (!validLinePattern.matcher(line).matches())
-                    throw new InvalidFormatException();
-                if (propertyStringPattern.matcher(line).matches())
-                    section.addProperty(
-                            parseProperty(line)
+                if (keyReg.matcher(line).matches())
+                    refreshedSec.addKey(
+                            parseKey(line)
                     );
             }
 
-            return section;
-
-        } catch (NoSuchElementException | InvalidTypeException ex) {
-            throw new InvalidFormatException();
-        }
+            return refreshedSec;
     }
 
-    public SectionContainer parse(File file) throws FileNotFoundException, InvalidFormatException, ParserException {
+    public SectionContainer parseFile(File iniToParse) throws FileNotFoundException {
         SectionContainer sectionContainer = new SectionContainer();
 
-        Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                if (!scanner.hasNext(validLinePattern))
-                    throw new InvalidFormatException();
-
-                if (scanner.hasNext(sectionNamePattern))
-                    sectionContainer.addSection(parseNextSection(scanner));
-                else if (scanner.hasNext(propertyStringPattern))
-                    throw new ParserException("An error occurred while trying to parse file");
-                else
-                    scanner.nextLine();
-            }
-
-
+        Scanner scanner = new Scanner(iniToParse);
+        while (scanner.hasNextLine()) {
+            if (scanner.hasNext(sectionNameReg))
+                sectionContainer.addSection(parseSec(scanner));
+            else
+                scanner.nextLine();
+        }
         return sectionContainer;
     }
-
-
 }

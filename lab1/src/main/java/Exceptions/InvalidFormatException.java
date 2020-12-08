@@ -1,17 +1,7 @@
 package Exceptions;
 
-public class InvalidFormatException extends Exception{
-
+public class InvalidFormatException extends RuntimeException{
     public InvalidFormatException() {
         super("Invalid line format");
-    }
-
-    public InvalidFormatException(String msg) {
-        super(msg);
-    }
-
-
-    public InvalidFormatException(Throwable cause) {
-        super("Invalid format", cause);
     }
 }

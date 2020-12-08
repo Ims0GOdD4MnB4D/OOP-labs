@@ -2,22 +2,21 @@ import ini.Collections.SectionContainer;
 import ini.model.IniParser;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         IniParser iniParser = new IniParser();
-        try {
-            SectionContainer sectionContainer = iniParser.parse(
-                    new File("D:\\jetbrains\\projs\\IdeaProjects\\INIparser\\src\\main\\java\\test.ini"));
+//        try {
+            SectionContainer sectionContainer = iniParser.parseFile(
+                    new File("D:\\jetbrains\\projs\\IdeaProjects\\OOP-labs\\lab1\\src\\main\\java\\test.ini"));
             System.out.println(
                     sectionContainer.
                             section("COMMON")
-                                .getProperty("DiskCachePath"));
+                                .getKey("DiskCachePath"));
             System.out.println
                     (sectionContainer.
                             section("ADC_DEV").
-                                getProperty("Driver"));
+                            getKey("Driver"));
             System.out.println
                     (sectionContainer.
                             section("ADC_DEV").
@@ -39,8 +38,7 @@ public class Main {
                             section("NCMD").
                                 getString("BufferLenSeconds"));
         }
-        catch(Exception ex) {
-            throw new FileNotFoundException("File not found");
-        }
+//        catch(Exception ex) {
+//            throw new FileNotFoundException("File not found");
+//        }
     }
-}
