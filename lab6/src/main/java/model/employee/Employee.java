@@ -32,11 +32,10 @@ public class Employee implements AbstractEmployee, Serializable {
     private UUID head;
     private UUID teamlead = null;
 
-    @Builder
-    public Employee(String name, ArrayList<Employee> employees) {
+
+    public Employee(String name) {
         this.name = name;
         reportDraft = new Report();
-        this.employeeList = employees;
     }
 
     public boolean isLead() {

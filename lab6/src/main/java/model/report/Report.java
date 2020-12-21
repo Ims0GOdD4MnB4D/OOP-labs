@@ -7,6 +7,7 @@ import model.dto.ReportDTO;
 import model.task.Task;
 
 import javax.persistence.*;
+import java.text.DateFormat;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -28,12 +29,12 @@ public class Report implements AbstractReport {
     private List<Task> reportedTasks = new ArrayList<>();
     private String comment;
     private ReportState state = ReportState.NOT_PROVEN;
-    private Instant deadline = Instant.now();
+    private Instant deadline;
     private UUID executorId;
 
     public Report(int days, UUID id, Task ... tasks) {
         reportedTasks.addAll(Arrays.asList(tasks));
-        deadline.plus(Period.ofDays(days));
+        deadline = Instant.now().plus(Period.ofDays(days));
         executorId = id;
     }
 

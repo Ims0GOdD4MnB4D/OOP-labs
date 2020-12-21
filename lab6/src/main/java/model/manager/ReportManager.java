@@ -8,6 +8,8 @@ import model.dto.EmployeeDTO;
 import model.dto.ReportDTO;
 import model.dto.TaskDTO;
 import model.employee.Employee;
+import model.mapper.ReportMapper;
+import model.mapper.TaskMapper;
 import model.report.Report;
 import model.task.Task;
 import model.task.TaskState;
@@ -22,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
- class ReportManager implements EntityManager <Report, ReportDTO>{
+public class ReportManager {
     private final ReportRepository reportRepository;
     private final EmployeeRepository employeeRepository;
     private final TaskRepository taskRepository;
@@ -43,34 +45,10 @@ import java.util.UUID;
                 auth = AuthSystem.AUTHORIZED;
     }
 
-    @Override
-    public Report convertToEntity(ReportDTO dto) {
-        Report report = new Report();
-        report.setReportId(dto.getReportId());
-        for(TaskDTO taskDTO : dto.getReportedTasks())
-            report.addTask(taskManager.convertToEntity(taskDTO));
-        report.setComment(dto.getComment());
-        report.setState(dto.getState());
-        report.setExecutorId(dto.getExecutorId());
-        return report;
-    }
-
-    @Override
-    public ReportDTO convertToDTO(Report entity) {
-        ReportDTO dto = new ReportDTO();
-        dto.setReportId(entity.getReportId());
-        dto.setState(entity.getState());
-        dto.setComment(entity.getComment());
-        dto.setExecutorId(entity.getExecutorId());
-        for(Task item : entity.getReportedTasks())
-            dto.addTask(taskManager.convertToDTO(item));
-        return dto;
-    }
-
     public ReportDTO getById(UUID id) {
         for(Report item : reportRepository.getReportTable())
             if(item.getReportId().equals(id))
-                return convertToDTO(item);
+                return ReportMapper.convertToDTO(item);
         throw new NotFoundEntityException();
     }
 
@@ -78,10 +56,10 @@ import java.util.UUID;
         Report dailyReport = new Report(1, creator.getEmployeeId());
         for(TaskDTO item : creator.getTaskList())
             if(item.getState().equals(TaskState.RESOLVED))
-                dailyReport.addTask(taskManager.convertToEntity(item));
-        creator.addReport(convertToDTO(dailyReport));
+                dailyReport.addTask(TaskMapper.convertToEntity(item));
+        creator.addReport(ReportMapper.convertToDTO(dailyReport));
         reportRepository.save(dailyReport);
-        return convertToDTO(dailyReport);
+        return ReportMapper.convertToDTO(dailyReport);
     }
 
     public List<TaskDTO> resolvedTasksForDay(ReportDTO report) {
@@ -89,7 +67,7 @@ import java.util.UUID;
         for(Task item : taskRepository.getTaskTable())
             if(item.getState().equals(TaskState.RESOLVED) &&
                     item.getTimeByEvent("RESOLVED").isBefore(report.getDeadline()))
-                ans.add(taskManager.convertToDTO(item));
+                ans.add(TaskMapper.convertToDTO(item));
         return ans;
     }
 
@@ -103,21 +81,21 @@ import java.util.UUID;
             throw new NoAccessException();
         employeeDTO.updateReportList(reportDTO, taskDTO);
         reportDTO.addTask(taskDTO);
-        reportRepository.saveOrUpdate(convertToEntity(reportDTO));
+        reportRepository.saveOrUpdate(ReportMapper.convertToEntity(reportDTO));
     }
 
     public void createSprintReport(EmployeeDTO creator, int deadline) {
         Report sprintDraft = new Report(deadline, creator.getEmployeeId());
         for(TaskDTO item : creator.getTaskList()) {
             if (item.getState().equals(TaskState.RESOLVED) && item.isSprint())
-                sprintDraft.addTask(taskManager.convertToEntity(item));
+                sprintDraft.addTask(TaskMapper.convertToEntity(item));
         }
         reportRepository.save(sprintDraft);
         for(TaskDTO item : creator.getTaskList()) {
             if (item.isSprint())
-                sprintDraft.addTask(taskManager.convertToEntity(item));
+                sprintDraft.addTask(TaskMapper.convertToEntity(item));
         }
-        creator.setReportDraft(convertToDTO(sprintDraft));
+        creator.setReportDraft(ReportMapper.convertToDTO(sprintDraft));
     }
 
     public void aggregateTeamReport(EmployeeDTO teamlead) {

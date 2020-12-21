@@ -38,6 +38,10 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
+    public Session getNewSession() {
+        return session;
+    }
+
     public static void shutdown() {
         getSessionFactory().close();
     }

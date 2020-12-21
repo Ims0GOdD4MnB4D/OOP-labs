@@ -25,8 +25,9 @@ public class EmployeeRepository implements EntityRepository <Employee> {
     }
 
     @Override
-    public void save(Employee employee) {
+    public Employee save(Employee employee) {
         serviceDB.getSession().save(employee);
+        return serviceDB.getSession().find(employee.getClass(), employee.getEmployeeId());
     }
 
     @Override

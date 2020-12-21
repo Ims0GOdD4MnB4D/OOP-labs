@@ -2,7 +2,6 @@ package repository;
 
 import model.employee.Employee;
 import model.report.Report;
-import model.task.Task;
 import service.ServiceDB;
 
 import javax.persistence.TypedQuery;
@@ -26,8 +25,9 @@ public class ReportRepository implements EntityRepository <Report> {
     }
 
     @Override
-    public void save(Report report) {
+    public Employee save(Report report) {
         serviceDB.getSession().save(report);
+        return null;
     }
 
     @Override

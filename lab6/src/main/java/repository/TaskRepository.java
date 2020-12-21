@@ -1,5 +1,6 @@
 package repository;
 
+import model.employee.Employee;
 import model.task.Task;
 import service.ServiceDB;
 
@@ -23,8 +24,9 @@ public class TaskRepository implements EntityRepository <Task> {
     }
 
     @Override
-    public void save(Task task) {
+    public Employee save(Task task) {
         serviceDB.getSession().save(task);
+        return null;
     }
 
     @Override
