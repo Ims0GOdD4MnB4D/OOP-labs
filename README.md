@@ -4,3 +4,4 @@
 #### 3. [Race Simulator](lab3)
 #### 4. [Backup](lab4)
 #### 5. [Bank System](lab5)
+#### 6. [Report System](lab6)
