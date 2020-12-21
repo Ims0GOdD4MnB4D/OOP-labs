@@ -25,20 +25,22 @@ public class Employee implements AbstractEmployee, Serializable {
     @Setter
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> taskList = new ArrayList<>();
-    @ManyToOne
-    private Employee head;
     @OneToMany(cascade = CascadeType.ALL)
-    private  List<Employee> employees = new ArrayList<>();
+    private  List<Employee> employeeList = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Report> reports = new ArrayList<>();
-    @ManyToOne
-    private Employee teamlead;
+    private List<Report> reportList = new ArrayList<>();
+    private UUID head;
+    private UUID teamlead = null;
 
     @Builder
-    public Employee(String name, Employee ... employees) {
+    public Employee(String name, ArrayList<Employee> employees) {
         this.name = name;
         reportDraft = new Report();
-        this.employees.addAll(Arrays.asList(employees));
+        this.employeeList = employees;
+    }
+
+    public boolean isLead() {
+        return teamlead == null;
     }
 
     @Override
@@ -46,20 +48,18 @@ public class Employee implements AbstractEmployee, Serializable {
         taskList.addAll(Arrays.asList(tasks));
     }
 
-    public void updateReport(Task task) {
-        reportDraft.addTask(task);
-    }
-
     public void addEmployee(@NonNull Employee employee) {
-        if(employees.contains(employee))
+        if(employeeList.contains(employee))
             throw new EmployeeIsAlreadySubordinatedException(employee);
-        employees.add(employee);
-        employee.setHead(this);
+        employeeList.add(employee);
+        employee.setHead(this.getEmployeeId());
+        employee.setTeamlead(this.teamlead);
     }
 
     public void addReport(Report report) {
-        reports.add(report);
+        reportList.add(report);
     }
+
 
     @Override
     public String toString() {
@@ -68,8 +68,10 @@ public class Employee implements AbstractEmployee, Serializable {
                 ", name='" + name + '\'' +
                 ", reportDraft=" + reportDraft +
                 ", taskList=" + taskList +
-                ", head=" + (head == null ? null : head.getEmployeeId())  +
-                ", employees=" + employees +
+                ", employeeList=" + employeeList +
+                ", reportList=" + reportList +
+                ", head=" + head +
+                ", teamlead=" + teamlead +
                 '}';
     }
 }

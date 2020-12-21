@@ -1,6 +1,8 @@
 package model.task;
 
 import exceptions.InvalidAttemptSwitchingTaskStateException;
+import exceptions.NoCommitsFound;
+import exceptions.NoEventsWasFoundInLoggerException;
 import lombok.*;
 import model.employee.Employee;
 
@@ -12,10 +14,10 @@ import java.util.UUID;
 import javafx.util.Pair;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 public class Task implements AbstractTask {
+    @Setter
     @Id @GeneratedValue
     private UUID taskId;
     private String title;
@@ -24,38 +26,20 @@ public class Task implements AbstractTask {
     private String comment;
     @ElementCollection
     private List<Pair<String, Instant>> logger = new ArrayList<>();
-    @ManyToOne
-    private Employee appointing = null;
-    @ManyToOne
-    private Employee executor = null;
+    private UUID appointing;
+    private UUID executor;
+    @Setter
+    private boolean isSprint = false;
 
-        public enum TaskState {
-        OPEN {
-            @Override
-            public String getState() {
-                return "Current state is OPEN";
-            }
-        }, ACTIVE  {
-            @Override
-            public String getState() {
-                return "Current state is ACTIVE";
-            }
-        }, RESOLVED  {
-            @Override
-            public String getState() {
-                return "Current state is RESOLVED";
-            }
-        };
-        public abstract String getState();
-    }
     @Builder
     public Task(String title, String description,
-                @NonNull Employee employee, @NonNull Employee appointing) {
+                @NonNull Employee employee, @NonNull Employee appointing, boolean isSprint) {
         this.title = title;
         this.description = description;
-        this.executor = employee;
-        this.appointing = appointing;
+        this.executor = employee.getEmployeeId();
+        this.appointing = appointing.getEmployeeId();
         state = TaskState.OPEN;
+        this.isSprint = isSprint;
         logger.add(new Pair<>(TaskState.OPEN.getState(), Instant.now()));
     }
 
@@ -73,14 +57,64 @@ public class Task implements AbstractTask {
         }
     }
 
+    public Instant getLastCommit() {
+        if(!logger.isEmpty())
+            return logger.get(logger.size() - 1).getValue();
+        throw new NoCommitsFound();
+    }
+
+    public Instant getTimeByEvent(String event) {
+        for(Pair<String, Instant> log : logger)
+            if(log.getKey().equals(event))
+                return log.getValue();
+        throw new NoEventsWasFoundInLoggerException(event);
+    }
+
+    public boolean didEmployeeCommited() {
+        for(Pair<String, Instant> log : logger)
+            if(log.getKey().equals(TaskState.OPEN.getState())
+                || log.getKey().equals("CHANGE EXECUTOR")
+                || log.getKey().equals("COMMENT"))
+                return true;
+        return false;
+    }
+
     public void changeExecutor(@NonNull Employee executor) {
-            this.executor = executor;
-            logger.add(new Pair<>("Employee executor changed to "
+            this.executor = executor.getEmployeeId();
+            logger.add(new Pair<>("CHANGE EXECUTOR"
                     + executor.toString(), Instant.now()));
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+        logger.add(new Pair<>("TITLE", Instant.now()));
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+        logger.add(new Pair<>("DESCRIPTION", Instant.now()));
+    }
+
+    public void setAppointing(UUID appointing) {
+        this.appointing = appointing;
+        logger.add(new Pair<>("APPOINTING", Instant.now()));
+    }
+
+    public void setExecutor(UUID executor) {
+        this.executor = executor;
+        logger.add(new Pair<>("EXECUTOR", Instant.now()));
     }
 
     public void setComment(String comment) {
         this.comment = comment;
-        logger.add(new Pair<>("Chore: added comment", Instant.now()));
+        logger.add(new Pair<>("COMMENT", Instant.now()));
+    }
+
+    public void setState(TaskState state) {
+        this.state = state;
+    }
+
+    public void setLogger(List<Pair<String, Instant>> logger) {
+        this.logger = logger;
     }
 }

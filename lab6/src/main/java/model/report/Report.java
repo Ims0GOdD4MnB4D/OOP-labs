@@ -7,6 +7,11 @@ import model.dto.ReportDTO;
 import model.task.Task;
 
 import javax.persistence.*;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,32 +28,17 @@ public class Report implements AbstractReport {
     private List<Task> reportedTasks = new ArrayList<>();
     private String comment;
     private ReportState state = ReportState.NOT_PROVEN;
+    private Instant deadline = Instant.now();
+    private UUID executorId;
 
-    public enum ReportState {
-        APPROVED {
-            @Override
-            public String getState() {
-                return "Current state is APPROVED";
-            }
-        }, NOT_PROVEN  {
-            @Override
-            public String getState() {
-                return "Report state is NOT_PROVEN";
-            }
-        };
-        public abstract String getState();
-    }
-
-    public Report(ReportDTO dto) {
-        this.reportId = dto.getReportId();
-        this.comment = dto.getComment();
-        this.state = dto.getState();
-        //TODO: get tasks
-        //this.reportedTasks = dto.getTaskList();
-    }
-
-    public Report(Task ... tasks) {
+    public Report(int days, UUID id, Task ... tasks) {
         reportedTasks.addAll(Arrays.asList(tasks));
+        deadline.plus(Period.ofDays(days));
+        executorId = id;
+    }
+
+    public boolean isExpired() {
+        return Instant.now().isAfter(deadline);
     }
 
     @Override
