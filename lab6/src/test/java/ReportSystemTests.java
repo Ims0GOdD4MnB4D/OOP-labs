@@ -70,33 +70,33 @@ public class ReportSystemTests {
         task1.switchTaskState();
     }
 
-//    @Test
-//    public void test3() {
-//        ServiceDB serviceDB = new ServiceDB();
-//        TaskRepository taskRepository = new TaskRepository(serviceDB);
-//        EmployeeRepository employeeRepository = new EmployeeRepository(serviceDB);
-//        ReportRepository reportRepository = new ReportRepository(serviceDB);
-//        TaskManager taskManager = new TaskManager(taskRepository, employeeRepository);
-//        ReportManager reportManager =
-//                new ReportManager(reportRepository, taskManager, employeeRepository, taskRepository);
-//        EmployeeManager employeeManager =
-//                new EmployeeManager(employeeRepository);
-//        Employee manager1 = new Employee("Andriy Taran");
-//        Employee tl1 = new Employee("Volodymyr Zelensky");
-//        Employee manager2 = new Employee("Ihor Petrashko");
-//        Task task1 = Task.builder()
-//                .title("lab")
-//                .description("do fooking lab")
-//                .employee(manager1)
-//                .appointing(tl1)
-//                .build();
-//        manager1 = employeeManager.addEmployee(EmployeeMapper.convertToDTO(manager1));
-//        manager2 = employeeManager.addEmployee(EmployeeMapper.convertToDTO(manager2));
-//        tl1 = employeeManager.addEmployee(EmployeeMapper.convertToDTO(tl1));
-//        employeeManager.changeHead(EmployeeMapper.convertToDTO(manager1)
-//                , EmployeeMapper.convertToDTO(tl1));
-//        Assert.assertEquals(manager1.getHead(),
-//                employeeManager.getEmployeeRepository()
-//                        .get(manager1.getEmployeeId()).getHead());
-//    }
+    @Test
+    public void test3() {
+        ServiceDB serviceDB = new ServiceDB();
+        TaskRepository taskRepository = new TaskRepository(serviceDB);
+        EmployeeRepository employeeRepository = new EmployeeRepository(serviceDB);
+        ReportRepository reportRepository = new ReportRepository(serviceDB);
+        TaskManager taskManager = new TaskManager(taskRepository, employeeRepository);
+        ReportManager reportManager =
+                new ReportManager(reportRepository, taskManager, employeeRepository, taskRepository);
+        EmployeeManager employeeManager =
+                new EmployeeManager(employeeRepository);
+        Employee manager1 = new Employee("Andriy Taran");
+        Employee tl1 = new Employee("Volodymyr Zelensky");
+        Employee manager2 = new Employee("Ihor Petrashko");
+        Task task1 = Task.builder()
+                .title("lab")
+                .description("do fooking lab")
+                .employee(manager1)
+                .appointing(tl1)
+                .build();
+        manager1 = employeeManager.addEmployee(EmployeeMapper.convertToDTO(manager1));
+        manager2 = employeeManager.addEmployee(EmployeeMapper.convertToDTO(manager2));
+        tl1 = employeeManager.addEmployee(EmployeeMapper.convertToDTO(tl1));
+        employeeManager.changeHead(EmployeeMapper.convertToDTO(manager1)
+                , EmployeeMapper.convertToDTO(tl1));
+        Assert.assertEquals(manager1.getHead(),
+                employeeManager.getEmployeeRepository()
+                        .get(manager1.getEmployeeId()).getHead());
+    }
 }

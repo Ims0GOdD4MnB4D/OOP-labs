@@ -8,6 +8,10 @@ import model.dto.ReportDTO;
 import model.dto.TaskDTO;
 import model.employee.Employee;
 import model.mapper.EmployeeMapper;
+import model.mapper.ReportMapper;
+import model.mapper.TaskMapper;
+import model.report.Report;
+import model.task.Task;
 import repository.EmployeeRepository;
 
 import java.util.ArrayList;
@@ -18,7 +22,6 @@ public class EmployeeManager {
     @Getter
     private final EmployeeRepository employeeRepository;
 
-    //TODO: try without initializing
     public EmployeeManager(EmployeeRepository repository) {
         employeeRepository = repository;
     }
