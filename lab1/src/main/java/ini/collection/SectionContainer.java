@@ -1,4 +1,4 @@
-package ini.Collections;
+package ini.collection;
 
 import ini.section.Section;
 

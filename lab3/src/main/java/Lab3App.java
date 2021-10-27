@@ -8,7 +8,7 @@ import model.landVehicles.Centaur;
 import model.landVehicles.SpeedyCamel;
 import model.landVehicles.YeezyBoost;
 
-public class Main {
+public class Lab3App {
     public static void main(String[] args) throws InvalidDistance {
         Race race1 = new Race.Builder()
                 .landRace(new BactrianCamel(10, 30),

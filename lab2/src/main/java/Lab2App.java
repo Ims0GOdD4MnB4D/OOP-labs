@@ -7,7 +7,7 @@ import model.Shop;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public class Lab2App {
     public static void main(String[] args)
             throws InvalidProductQuantity, InvalidPrice, NoSuchProductFound, NoSuchShopFound, NoSuchProductPackageFound, NotEnoughProductQuantity {
         Shop centralDepartmentStore = new Shop("ЦУМ","Петровка ул., 2");

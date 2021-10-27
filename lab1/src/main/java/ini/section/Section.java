@@ -1,8 +1,10 @@
 package ini.section;
 
-import Exceptions.KeyNotFoundException;
-import Exceptions.InvalidTypeException;
-import ini.key.Key;
+import exceptions.InvalidTypeException;
+import exceptions.PropertyNotFoundException;
+import exceptions.NonValidTypeException;
+import ini.ValueType;
+import ini.property.Property;
 
 import java.util.*;
 
@@ -10,17 +12,23 @@ import java.util.*;
 public class Section {
     private final String val;
 
-    private Map<String, Key> data = new HashMap<>();
+    private final Map<String, Property> data = new LinkedHashMap<>();
 
     public Section(String val) {
         this.val = val;
     }
 
-    public Key getKey(String key) {
+    public Section(String val, Property ... properties) {
+        this.val = val;
+
+        List.of(properties).forEach(this::addProperty);
+    }
+
+    public Property getProperty(String key) throws PropertyNotFoundException {
         try  {
             return data.get(key);
         } catch(RuntimeException ex) {
-            throw new KeyNotFoundException();
+            throw new PropertyNotFoundException();
         }
     }
 
@@ -28,43 +36,69 @@ public class Section {
         return val;
     }
 
-    public void addKey(Key key) {
-        data.put(key.getKey(), key);
+    public void addProperty(String key, String val) throws InvalidTypeException {
+        data.put(key, new Property(key, val));
     }
 
-    public int getInt(String key) {
+    public void addProperty(Property property) {
+        data.put(property.getKey(), property);
+    }
 
-        Key curKey;
+    public int getInt(String key) throws NonValidTypeException, PropertyNotFoundException {
+
+        Property property;
         try  {
-            curKey = getKey(key);
+            property = getProperty(key);
         } catch (RuntimeException ex) {
-            throw new KeyNotFoundException();
+            throw new PropertyNotFoundException();
         }
         try {
-            return curKey.parseInt();
+            return property.parseInt();
         } catch (RuntimeException ex) {
-            throw new InvalidTypeException();
+            throw new NonValidTypeException(ValueType.INT);
         }
     }
 
-    public double getDouble(String key){
-        Key curKey;
+    public double getDouble(String key) throws NonValidTypeException, PropertyNotFoundException {
+        Property property;
         try  {
-            curKey = getKey(key);
+            property = getProperty(key);
         } catch (RuntimeException ex) {
-            throw new KeyNotFoundException();
+            throw new PropertyNotFoundException();
         }
         try {
-            return curKey.tryDouble();
+            return property.parseDouble();
         } catch (RuntimeException ex) {
-            throw new InvalidTypeException();
+            throw new NonValidTypeException(ValueType.DOUBLE);
         }
     }
-    public String getString(String key) throws KeyNotFoundException {
+    public String getString(String key) throws PropertyNotFoundException {
         try {
-            return getKey(key).getVal();
+            return getProperty(key).getVal();
         } catch (RuntimeException ex) {
-            throw new KeyNotFoundException();
+            throw new PropertyNotFoundException();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Section section = (Section) o;
+        return val.equals(section.val) &&
+                data.equals(section.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(val, data);
+    }
+
+    @Override
+    public String toString() {
+        return "Section{" +
+                "val='" + val + '\'' +
+                ", data=" + data +
+                '}';
     }
 }
