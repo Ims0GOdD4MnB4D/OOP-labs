@@ -1,12 +1,15 @@
 package ini.section;
 
 import exceptions.InvalidTypeException;
-import exceptions.PropertyNotFoundException;
 import exceptions.NonValidTypeException;
+import exceptions.PropertyNotFoundException;
 import ini.ValueType;
 import ini.property.Property;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class Section {
@@ -18,16 +21,16 @@ public class Section {
         this.val = val;
     }
 
-    public Section(String val, Property ... properties) {
+    public Section(String val, Property... properties) {
         this.val = val;
 
         List.of(properties).forEach(this::addProperty);
     }
 
     public Property getProperty(String key) throws PropertyNotFoundException {
-        try  {
+        try {
             return data.get(key);
-        } catch(RuntimeException ex) {
+        } catch (RuntimeException ex) {
             throw new PropertyNotFoundException();
         }
     }
@@ -47,7 +50,7 @@ public class Section {
     public int getInt(String key) throws NonValidTypeException, PropertyNotFoundException {
 
         Property property;
-        try  {
+        try {
             property = getProperty(key);
         } catch (RuntimeException ex) {
             throw new PropertyNotFoundException();
@@ -61,7 +64,7 @@ public class Section {
 
     public double getDouble(String key) throws NonValidTypeException, PropertyNotFoundException {
         Property property;
-        try  {
+        try {
             property = getProperty(key);
         } catch (RuntimeException ex) {
             throw new PropertyNotFoundException();
@@ -72,6 +75,7 @@ public class Section {
             throw new NonValidTypeException(ValueType.DOUBLE);
         }
     }
+
     public String getString(String key) throws PropertyNotFoundException {
         try {
             return getProperty(key).getVal();

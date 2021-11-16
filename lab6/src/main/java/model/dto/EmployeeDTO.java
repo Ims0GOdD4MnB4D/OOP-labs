@@ -1,7 +1,6 @@
 package model.dto;
 
 import lombok.Data;
-import model.task.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +30,8 @@ public class EmployeeDTO {
     }
 
     public void updateReportList(ReportDTO reportDTO, TaskDTO taskDTO) {
-        for(ReportDTO item : reportList)
-            if(item.getReportId().equals(reportDTO.getReportId()))
+        for (ReportDTO item : reportList)
+            if (item.getReportId().equals(reportDTO.getReportId()))
                 reportDTO.addTask(taskDTO);
     }
 }

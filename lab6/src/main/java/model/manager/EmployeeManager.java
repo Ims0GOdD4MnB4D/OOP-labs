@@ -8,10 +8,6 @@ import model.dto.ReportDTO;
 import model.dto.TaskDTO;
 import model.employee.Employee;
 import model.mapper.EmployeeMapper;
-import model.mapper.ReportMapper;
-import model.mapper.TaskMapper;
-import model.report.Report;
-import model.task.Task;
 import repository.EmployeeRepository;
 
 import java.util.ArrayList;
@@ -27,8 +23,8 @@ public class EmployeeManager {
     }
 
     public Employee getById(UUID employeeId) {
-        for(Employee item : employeeRepository.getEmployeeTable())
-            if(item.getEmployeeId().equals(employeeId))
+        for (Employee item : employeeRepository.getEmployeeTable())
+            if (item.getEmployeeId().equals(employeeId))
                 return item;
         throw new NotFoundEntityException();
     }
@@ -41,22 +37,22 @@ public class EmployeeManager {
     }
 
     public Employee addEmployee(EmployeeDTO employeeDTO) {
-        if(employeeRepository.getEmployeeTable().contains(EmployeeMapper.convertToEntity(employeeDTO)))
+        if (employeeRepository.getEmployeeTable().contains(EmployeeMapper.convertToEntity(employeeDTO)))
             throw new EntityExistsInDBException();
         return employeeRepository.save(EmployeeMapper.convertToEntity(employeeDTO));
     }
 
     public List<ReportDTO> getEmployeesReports(EmployeeDTO curEm) {
         List<ReportDTO> ans = new ArrayList<>();
-        for(EmployeeDTO item : curEm.getEmployeeList())
+        for (EmployeeDTO item : curEm.getEmployeeList())
             ans.addAll(item.getReportList());
         return ans;
     }
 
     public List<TaskDTO> getTasksForSprint(EmployeeDTO curEm) {
         List<TaskDTO> ans = new ArrayList<>();
-        for(TaskDTO item : curEm.getTaskList())
-            if(item.isSprint())
+        for (TaskDTO item : curEm.getTaskList())
+            if (item.isSprint())
                 ans.add(item);
         return ans;
     }

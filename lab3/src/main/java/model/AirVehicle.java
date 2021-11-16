@@ -12,7 +12,7 @@ public abstract class AirVehicle extends VehicleType {
 
     @Override
     public float timeToPassTheDistance(float distance) {
-        return (distance - cuttedDistance(distance))/speed;
+        return (distance - cuttedDistance(distance)) / speed;
     }
 
     public Integer getSpeed() {

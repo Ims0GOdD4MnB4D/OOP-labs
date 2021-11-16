@@ -13,7 +13,7 @@ public class CleaningByDate implements AbstractSimpleCleaningAlgorithm {
 
     @Override
     public void clean(Backup backup) {
-        while(isCleaningNeeded(backup)) {
+        while (isCleaningNeeded(backup)) {
             backup.deleteRestorePoint(backup.getRpList().get(0).getRpId());
         }
     }

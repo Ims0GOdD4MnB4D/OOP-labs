@@ -15,8 +15,8 @@ public class HybridEveryLimits implements AbstractHybridAlgorithm {
 
     @Override
     public void clean(Backup backup) {
-        for(AbstractSimpleCleaningAlgorithm item : cleanerList) {
-            if(!item.isCleaningNeeded(backup))
+        for (AbstractSimpleCleaningAlgorithm item : cleanerList) {
+            if (!item.isCleaningNeeded(backup))
                 return;
         }
         for (AbstractSimpleCleaningAlgorithm abstractCleaningAlgorithm : cleanerList) {

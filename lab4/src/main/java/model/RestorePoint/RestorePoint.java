@@ -6,11 +6,14 @@ import exceptions.DirectoryNotFoundException;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public abstract class RestorePoint implements AbstractRestorePoint {
-    private  CustomArchive archive;
-    private  List<File> fileList;
+    private CustomArchive archive;
+    private List<File> fileList;
     private final UUID rpId = new UUID(Integer.MAX_VALUE, 0);
     private final LocalDateTime creationTime = LocalDateTime.now();
 
@@ -24,9 +27,9 @@ public abstract class RestorePoint implements AbstractRestorePoint {
 
     public RestorePoint(String directoryPath) {
         File dir = new File(directoryPath);
-        if(!dir.exists())
+        if (!dir.exists())
             throw new DirectoryNotFoundException(directoryPath);
-        if(Objects.requireNonNull(dir.list()).length == 0)
+        if (Objects.requireNonNull(dir.list()).length == 0)
             throw new DirectoryEmptyException(dir);
         fileList = new java.util.ArrayList<>(Arrays.asList(Objects.requireNonNull(dir.listFiles())));
     }
@@ -34,12 +37,12 @@ public abstract class RestorePoint implements AbstractRestorePoint {
     @Override
     public int getRestorePointSize() {
         int size = 0;
-        if(fileList != null)
-            for(File item : fileList) {
-            size += item.length();
+        if (fileList != null)
+            for (File item : fileList) {
+                size += item.length();
             }
         else
-            for(File item : archive.unzip()) {
+            for (File item : archive.unzip()) {
                 size += item.length();
             }
         return size;

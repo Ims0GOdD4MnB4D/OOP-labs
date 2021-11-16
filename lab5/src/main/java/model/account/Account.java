@@ -17,7 +17,7 @@ public abstract class Account implements AbstractAccount {
     protected LocalDateTime curTime;
 
     public Account(Client client, int moneyAmount) {
-        if(moneyAmount < 0)
+        if (moneyAmount < 0)
             throw new IllegalMoneyAmountException();
         this.client = client;
         this.balance = moneyAmount;

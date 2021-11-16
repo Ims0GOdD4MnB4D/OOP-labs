@@ -3,22 +3,30 @@ package model.task;
 import exceptions.InvalidAttemptSwitchingTaskStateException;
 import exceptions.NoCommitsFound;
 import exceptions.NoEventsWasFoundInLoggerException;
-import lombok.*;
+import javafx.util.Pair;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 import model.employee.Employee;
 
-import javax.persistence.*;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import javafx.util.Pair;
 
 @Getter
 @Entity
 @NoArgsConstructor
 public class Task implements AbstractTask {
     @Setter
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private UUID taskId;
     private String title;
     private String description;
@@ -58,31 +66,31 @@ public class Task implements AbstractTask {
     }
 
     public Instant getLastCommit() {
-        if(!logger.isEmpty())
+        if (!logger.isEmpty())
             return logger.get(logger.size() - 1).getValue();
         throw new NoCommitsFound();
     }
 
     public Instant getTimeByEvent(String event) {
-        for(Pair<String, Instant> log : logger)
-            if(log.getKey().equals(event))
+        for (Pair<String, Instant> log : logger)
+            if (log.getKey().equals(event))
                 return log.getValue();
         throw new NoEventsWasFoundInLoggerException(event);
     }
 
     public boolean didEmployeeCommited() {
-        for(Pair<String, Instant> log : logger)
-            if(log.getKey().equals(TaskState.OPEN.getState())
-                || log.getKey().equals("CHANGE EXECUTOR")
-                || log.getKey().equals("COMMENT"))
+        for (Pair<String, Instant> log : logger)
+            if (log.getKey().equals(TaskState.OPEN.getState())
+                    || log.getKey().equals("CHANGE EXECUTOR")
+                    || log.getKey().equals("COMMENT"))
                 return true;
         return false;
     }
 
     public void changeExecutor(@NonNull Employee executor) {
-            this.executor = executor.getEmployeeId();
-            logger.add(new Pair<>("CHANGE EXECUTOR"
-                    + executor.toString(), Instant.now()));
+        this.executor = executor.getEmployeeId();
+        logger.add(new Pair<>("CHANGE EXECUTOR"
+                + executor, Instant.now()));
     }
 
     public void setTitle(String title) {

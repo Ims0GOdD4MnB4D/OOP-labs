@@ -38,8 +38,7 @@ public class Lab1App {
                     (sectionContainer.
                             section("NCMD").
                             getString("BufferLenSeconds"));
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             throw new FileNotFoundException("File not found");
         }
     }

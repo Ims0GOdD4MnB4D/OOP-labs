@@ -11,7 +11,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.UUID;
 
-public class TaskRepository implements EntityRepository <Task> {
+public class TaskRepository implements EntityRepository<Task> {
     private final ServiceDB serviceDB;
 
     public TaskRepository(ServiceDB serviceDB) {

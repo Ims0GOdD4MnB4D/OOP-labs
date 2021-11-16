@@ -7,12 +7,12 @@ import ini.collection.SectionContainer;
 import ini.property.Property;
 import ini.section.Section;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Scanner;
-import java.io.File;
 
 public class IniParser {
 

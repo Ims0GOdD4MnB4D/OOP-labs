@@ -1,10 +1,9 @@
 import controller.BackupManager.BackupManager;
+import controller.cleaning.hybrid.HybridAtLeastOneLimit;
+import controller.cleaning.hybrid.HybridEveryLimits;
 import controller.cleaning.simpe_cleaning.CleaningByPointAmount;
 import controller.cleaning.simpe_cleaning.CleaningBySize;
 import controller.creating.CreatingFolderStorage;
-import controller.cleaning.hybrid.HybridAtLeastOneLimit;
-import controller.cleaning.hybrid.HybridEveryLimits;
-import exceptions.RemovingDependent;
 import model.Backup.Backup;
 import model.RestorePoint.RestorePoint;
 import org.junit.Assert;
@@ -17,7 +16,7 @@ import java.util.List;
 public class BackupTests {
     @Test
     public void test1() {
-        BackupManager backupManager = 
+        BackupManager backupManager =
                 new BackupManager(new Backup(new File("src/main/resources/case 1")));
         backupManager.addCreatingAlgorithm(new CreatingFolderStorage());
         backupManager.activateCreatingDefaultRPAlgorithm();
@@ -75,7 +74,7 @@ public class BackupTests {
                 new CleaningBySize(250),
                 new CleaningByPointAmount(1)
         ));
-        
+
         backupManager.activateCleaningAlgorithm();
         int expected = 1;
         Assert.assertEquals(expected, backupManager.getBackup().getRpList().size());

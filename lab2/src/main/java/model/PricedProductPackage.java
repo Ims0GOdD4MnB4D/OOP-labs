@@ -15,7 +15,7 @@ public class PricedProductPackage {
         pricedProductPackage = new ProductPackagePricePair(new ProductPackage(product, productQuantity), productPrice);
     }
 
-    public PricedProductPackage (ProductPackagePricePair pricedProductPackage) {
+    public PricedProductPackage(ProductPackagePricePair pricedProductPackage) {
         this.pricedProductPackage = pricedProductPackage;
     }
 

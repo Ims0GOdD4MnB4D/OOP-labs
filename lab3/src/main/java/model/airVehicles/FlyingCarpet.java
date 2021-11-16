@@ -12,11 +12,11 @@ public class FlyingCarpet extends AirVehicle {
 
     @Override
     protected float cuttedDistance(float distance) {
-        if(distance < 1000)
+        if (distance < 1000)
             return 0;
-        else if(distance < 5000)
+        else if (distance < 5000)
             return (float) (distance * 0.03);
-        else if(distance < 10000)
+        else if (distance < 10000)
             return (float) (distance * 0.1);
         else
             return (float) (distance * 0.05);

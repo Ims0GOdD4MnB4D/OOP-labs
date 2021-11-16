@@ -1,7 +1,6 @@
 package ini.property;
 
 
-
 import exceptions.InvalidTypeException;
 
 import java.util.Objects;
@@ -11,7 +10,7 @@ public class Property {
     private String val;
 
 
-    public Property(String key, String val) throws InvalidTypeException {
+    public Property(String key, String val) {
         this.key = key;
         this.val = val;
     }

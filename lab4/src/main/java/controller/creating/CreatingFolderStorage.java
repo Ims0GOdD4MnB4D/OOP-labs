@@ -9,14 +9,14 @@ public class CreatingFolderStorage implements AbstractCreatingAlgorithm {
     @Override
     public void createRestorePointDefault(Backup backup) {
         RestorePointDefault newRp = new RestorePointDefault(
-                                    backup.getBackupStorage());
+                backup.getBackupStorage());
         backup.addRestorePoint(newRp);
     }
 
     @Override
     public void createRestorePointIncremental(Backup backup) {
         RestorePointIncremental newRp = new RestorePointIncremental(
-                                    backup.getBackupStorage());
+                backup.getBackupStorage());
         backup.addRestorePoint(newRp);
     }
 }

@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import model.account.Account;
-import model.account.CreditAccount;
-import model.account.DebitAccount;
-import model.account.DepositAccount;
 import model.transaction.Transaction;
 
 import java.util.ArrayList;
@@ -16,8 +13,8 @@ import java.util.UUID;
 
 @Getter
 public class Bank implements AbstractBank {
-    private List<Account> accounts = new ArrayList<>();
-    private List<Transaction> transactions = new ArrayList<>();
+    private List<Account> accounts;
+    private List<Transaction> transactions;
     @Setter
     private double interestRate;
     @Setter
@@ -42,14 +39,14 @@ public class Bank implements AbstractBank {
     }
 
     public void addAccount(Account acc) {
-        if(accounts == null)
+        if (accounts == null)
             accounts = new ArrayList<>();
         //defineAccountValues(acc);
         accounts.add(acc);
     }
 
     public void addTransaction(Transaction transaction) {
-        if(this.transactions == null)
+        if (this.transactions == null)
             transactions = new ArrayList<>();
         transactions.add(transaction);
     }
@@ -69,8 +66,8 @@ public class Bank implements AbstractBank {
     public void withdrawFromAcc(double moneyAmount, UUID id) {
         accounts.forEach(
                 acc -> {
-                    if(acc.getAccountId().equals(id)) {
-                        if(!acc.isClientReliable() && moneyAmount > operationsLimit)
+                    if (acc.getAccountId().equals(id)) {
+                        if (!acc.isClientReliable() && moneyAmount > operationsLimit)
                             return;
                         acc.withdrawMoney(moneyAmount);
                         addTransaction(Transaction.builder().fromAcc(acc).build());
@@ -83,8 +80,8 @@ public class Bank implements AbstractBank {
     public void addToAcc(double moneyAmount, UUID id) {
         accounts.forEach(
                 acc -> {
-                    if(acc.getAccountId().equals(id)) {
-                        if(!acc.isClientReliable() && moneyAmount > operationsLimit)
+                    if (acc.getAccountId().equals(id)) {
+                        if (!acc.isClientReliable() && moneyAmount > operationsLimit)
                             return;
                         acc.addMoney(moneyAmount);
                         addTransaction(Transaction.builder().toAcc(acc).build());
@@ -95,7 +92,7 @@ public class Bank implements AbstractBank {
 
     public void transferToAnotherAccount(double moneyAmount, UUID from, UUID to) {
         addToAcc(moneyAmount, to);
-        withdrawFromAcc(moneyAmount, from);;
+        withdrawFromAcc(moneyAmount, from);
         addTransaction(new Transaction(findAccById(from), findAccById(to), moneyAmount));
     }
 
@@ -103,7 +100,7 @@ public class Bank implements AbstractBank {
     public void cancelTransaction(UUID transferId) {
         transactions.forEach(
                 transfer -> {
-                    if(transfer.getTransferId().equals(transferId)) {
+                    if (transfer.getTransferId().equals(transferId)) {
                         cancelTransaction(transferId);
                         transactions.remove(transfer);
                     }
@@ -120,8 +117,8 @@ public class Bank implements AbstractBank {
     }
 
     public boolean accExists(UUID id) {
-        for(Account item : accounts)
-            if(item.getAccountId().equals(id))
+        for (Account item : accounts)
+            if (item.getAccountId().equals(id))
                 return true;
         return false;
     }

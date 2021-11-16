@@ -1,6 +1,6 @@
 package model;
 
-public abstract class LandVehicle extends VehicleType{
+public abstract class LandVehicle extends VehicleType {
     private Integer landVehSpeed;
     private Integer timeTillRest;
 
@@ -15,7 +15,7 @@ public abstract class LandVehicle extends VehicleType{
     private float restDuration(float distance) {
         float restTime = 0;
         int point = 1;
-        for(int i=0; i<distance/(landVehSpeed * timeTillRest); ++i) {
+        for (int i = 0; i < distance / (landVehSpeed * timeTillRest); ++i) {
             restTime += getRestDuration(point);
             ++point;
         }
@@ -24,7 +24,7 @@ public abstract class LandVehicle extends VehicleType{
 
     @Override
     public float timeToPassTheDistance(float distance) {
-        return distance/landVehSpeed + restDuration(distance);
+        return distance / landVehSpeed + restDuration(distance);
     }
 
     public Integer getTimeTillRest() {

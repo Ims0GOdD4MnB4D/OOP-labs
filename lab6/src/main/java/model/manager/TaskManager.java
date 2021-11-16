@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class TaskManager  {
+public class TaskManager {
     @Setter
     @Getter
     private TaskRepository taskRepository;
@@ -29,8 +29,8 @@ public class TaskManager  {
     }
 
     private Task getById(UUID taskId) {
-        for(Task item : taskRepository.getTaskTable())
-            if(item.getTaskId().equals(taskId))
+        for (Task item : taskRepository.getTaskTable())
+            if (item.getTaskId().equals(taskId))
                 return item;
         throw new NotFoundEntityException();
     }
@@ -41,8 +41,8 @@ public class TaskManager  {
 
     public List<TaskDTO> getByLastCommitInTheInterim(Instant time) {
         List<TaskDTO> ans = new ArrayList<>();
-        for(Task item : taskRepository.getTaskTable())
-            if(!item.getLastCommit().isAfter(time)
+        for (Task item : taskRepository.getTaskTable())
+            if (!item.getLastCommit().isAfter(time)
                     && !item.getLastCommit().isBefore(time))
                 ans.add(TaskMapper.convertToDTO(item));
         return ans;
@@ -50,8 +50,8 @@ public class TaskManager  {
 
     public List<TaskDTO> getByCreationInTheInterim(Instant time) {
         List<TaskDTO> ans = new ArrayList<>();
-        for(Task item : taskRepository.getTaskTable())
-            if(!item.getTimeByEvent(TaskState.OPEN.getState()).isAfter(time)
+        for (Task item : taskRepository.getTaskTable())
+            if (!item.getTimeByEvent(TaskState.OPEN.getState()).isAfter(time)
                     && !item.getTimeByEvent(TaskState.OPEN.getState()).isBefore(time))
                 ans.add(TaskMapper.convertToDTO(item));
         return ans;
@@ -59,9 +59,9 @@ public class TaskManager  {
 
     public List<TaskDTO> getTasksByEmployee(EmployeeDTO employeeDTO) {
         List<TaskDTO> ans = new ArrayList<>();
-        for(Employee item : employeeRepository.getEmployeeTable())
-            if(item.getEmployeeId().equals(employeeDTO.getEmployeeId())) {
-                for(Task task : item.getTaskList())
+        for (Employee item : employeeRepository.getEmployeeTable())
+            if (item.getEmployeeId().equals(employeeDTO.getEmployeeId())) {
+                for (Task task : item.getTaskList())
                     ans.add(TaskMapper.convertToDTO(task));
             }
         return ans;
@@ -69,10 +69,10 @@ public class TaskManager  {
 
     public List<TaskDTO> getTaskWithCommits(EmployeeDTO employeeDTO) {
         List<TaskDTO> ans = new ArrayList<>();
-        for(Employee item : employeeRepository.getEmployeeTable())
-            if(item.getEmployeeId().equals(employeeDTO.getEmployeeId())) {
-                for(Task task : item.getTaskList())
-                    if(task.didEmployeeCommited())
+        for (Employee item : employeeRepository.getEmployeeTable())
+            if (item.getEmployeeId().equals(employeeDTO.getEmployeeId())) {
+                for (Task task : item.getTaskList())
+                    if (task.didEmployeeCommited())
                         ans.add(TaskMapper.convertToDTO(task));
             }
         return ans;
@@ -98,8 +98,8 @@ public class TaskManager  {
 
     public List<TaskDTO> getAppointingTasks(EmployeeDTO employeeDTO) {
         List<TaskDTO> ans = new ArrayList<>();
-        for(Task task : taskRepository.getTaskTable())
-            if(task.getAppointing().equals(employeeDTO.getEmployeeId()))
+        for (Task task : taskRepository.getTaskTable())
+            if (task.getAppointing().equals(employeeDTO.getEmployeeId()))
                 ans.add(TaskMapper.convertToDTO(task));
         return ans;
     }

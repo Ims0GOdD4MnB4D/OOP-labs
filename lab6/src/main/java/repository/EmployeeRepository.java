@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-public class EmployeeRepository implements EntityRepository <Employee> {
+public class EmployeeRepository implements EntityRepository<Employee> {
     private final ServiceDB serviceDB;
 
     public EmployeeRepository(ServiceDB serviceDB) {

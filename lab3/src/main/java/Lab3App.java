@@ -1,8 +1,8 @@
 import controller.Race;
 import exceptions.InvalidDistance;
 import model.airVehicles.Broom;
-import model.airVehicles.Mortar;
 import model.airVehicles.FlyingCarpet;
+import model.airVehicles.Mortar;
 import model.landVehicles.BactrianCamel;
 import model.landVehicles.Centaur;
 import model.landVehicles.SpeedyCamel;
@@ -16,16 +16,16 @@ public class Lab3App {
                         new Centaur(15, 8),
                         new YeezyBoost(6, 60))
                 .airRace(new FlyingCarpet(10),
-                         new Mortar(8),
-                         new Broom(20))
+                        new Mortar(8),
+                        new Broom(20))
                 .distance(550)
                 .build();
         Race race2 = new Race.Builder()
-                    .airRace(new FlyingCarpet(10),
-                            new Mortar(8),
-                            new Broom(10))
-                    .distance(500)
-                    .build();
+                .airRace(new FlyingCarpet(10),
+                        new Mortar(8),
+                        new Broom(10))
+                .distance(500)
+                .build();
         Race race3 = new Race.Builder().distance(10).build();
         System.out.println(race1.startRace());
         System.out.println(race2.startRace());

@@ -14,7 +14,7 @@ public class BactrianCamel extends LandVehicle {
 
     @Override
     protected float getRestDuration(int curPoint) {
-        if(curPoint == 1)
+        if (curPoint == 1)
             return 5;
         else
             return 10;

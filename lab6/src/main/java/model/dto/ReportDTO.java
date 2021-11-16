@@ -2,7 +2,6 @@ package model.dto;
 
 import lombok.Data;
 import model.report.ReportState;
-import model.task.Task;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -18,7 +17,8 @@ public class ReportDTO {
     private List<TaskDTO> reportedTasks = new ArrayList<>();
     private Instant deadline = Instant.now();
     private UUID executorId;
-    public void addTask(TaskDTO ... tasks) {
+
+    public void addTask(TaskDTO... tasks) {
         reportedTasks.addAll(Arrays.asList(tasks));
     }
 }

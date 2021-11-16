@@ -49,7 +49,7 @@ public class ReportSystemTests {
         List<EmployeeDTO> expected = new ArrayList<>();
         expected.add(EmployeeMapper.convertToDTO(employeeRepository.get(manager1.getEmployeeId())));
         expected.add(EmployeeMapper.convertToDTO(employeeManager.getById(manager2.getEmployeeId())));
-        expected.add(EmployeeMapper.convertToDTO(employeeManager.getById(tl1.getEmployeeId())));;
+        expected.add(EmployeeMapper.convertToDTO(employeeManager.getById(tl1.getEmployeeId())));
         Assert.assertEquals(expected, employeeManager.getHierarchy());
         serviceDB.commit();
         serviceDB.closeSession();
@@ -91,7 +91,6 @@ public class ReportSystemTests {
                 .appointing(tl1)
                 .build();
         manager1 = employeeManager.addEmployee(EmployeeMapper.convertToDTO(manager1));
-        manager2 = employeeManager.addEmployee(EmployeeMapper.convertToDTO(manager2));
         tl1 = employeeManager.addEmployee(EmployeeMapper.convertToDTO(tl1));
         employeeManager.changeHead(EmployeeMapper.convertToDTO(manager1)
                 , EmployeeMapper.convertToDTO(tl1));

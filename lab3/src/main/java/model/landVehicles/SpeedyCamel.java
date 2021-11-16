@@ -14,9 +14,9 @@ public class SpeedyCamel extends LandVehicle {
 
     @Override
     protected float getRestDuration(int curPoint) {
-        if(curPoint == 1)
+        if (curPoint == 1)
             return 5;
-        else if(curPoint == 2)
+        else if (curPoint == 2)
             return 6.5f;
         else
             return 8;

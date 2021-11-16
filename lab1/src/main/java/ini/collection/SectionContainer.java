@@ -12,17 +12,17 @@ public class SectionContainer {
     private Map<String, Section> value = new HashMap<>();
 
     public SectionContainer(Collection<Section> sections) {
-        for(var item : sections) {
+        for (var item : sections) {
             value.put(item.getVal(), item);
         }
     }
 
-    public SectionContainer(Section ... sections) {
+    public SectionContainer(Section... sections) {
         this(List.of(sections));
     }
 
     public Section section(String key) {
-            return (value.get(key));
+        return (value.get(key));
     }
 
     public void addSection(Section section) {

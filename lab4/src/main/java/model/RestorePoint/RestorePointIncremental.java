@@ -7,12 +7,10 @@ import java.util.List;
 
 public class RestorePointIncremental extends RestorePoint {
     private RestorePointDefault depPoint;
+
     public RestorePointIncremental(String directoryPath) {
         super(directoryPath);
     }
-//    public RestorePointIncremental(RestorePoint restorePoint) {
-//        super();
-//    }
 
     public RestorePointIncremental(CustomArchive archive) {
         super(archive);

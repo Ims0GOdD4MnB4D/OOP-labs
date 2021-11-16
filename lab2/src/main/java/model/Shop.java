@@ -1,8 +1,15 @@
 package model;
 
-import exceptions.*;
+import exceptions.InvalidPrice;
+import exceptions.InvalidProductQuantity;
+import exceptions.NoSuchProductFound;
+import exceptions.NoSuchProductPackageFound;
+import exceptions.NoSuchShopFound;
+import exceptions.NotEnoughProductQuantity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Shop {
 
@@ -35,18 +42,18 @@ public class Shop {
     }
 
     public void addProduct(Product product, int price, Integer productQuantity) throws InvalidProductQuantity, InvalidPrice {
-        if(price < 0)
+        if (price < 0)
             throw new InvalidPrice();
-        if(productQuantity < 0)
+        if (productQuantity < 0)
             throw new InvalidProductQuantity();
         productList.add(new PricedProductPackage(new ProductPackage(product, productQuantity), price));
     }
 
     public void changePrice(Product product, Integer newPrice) throws NoSuchProductFound, InvalidPrice {
-        if(newPrice < 0)
+        if (newPrice < 0)
             throw new InvalidPrice();
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPackage().getProduct().getProductID() == product.getProductID()) {
+        for (PricedProductPackage item : productList) {
+            if (item.getProductPackage().getProduct().getProductID() == product.getProductID()) {
                 item.setProductPrice(newPrice);
                 return;
             }
@@ -55,22 +62,22 @@ public class Shop {
     }
 
     public List<ProductPackage> getProductListByPrice(Integer money) {
-        List<ProductPackage> whatYouCanBuy= new ArrayList<>();
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPrice() < money && item.getProductPackage().getQuantity() != 0) {
-                    whatYouCanBuy.add(new ProductPackage(item.getProductPackage().getProduct(),
-                            Math.min((int) (money/item.getProductPrice()),
-                            item.getProductPackage().getQuantity())));
-                }
+        List<ProductPackage> whatYouCanBuy = new ArrayList<>();
+        for (PricedProductPackage item : productList) {
+            if (item.getProductPrice() < money && item.getProductPackage().getQuantity() != 0) {
+                whatYouCanBuy.add(new ProductPackage(item.getProductPackage().getProduct(),
+                        Math.min((int) (money / item.getProductPrice()),
+                                item.getProductPackage().getQuantity())));
             }
+        }
         return whatYouCanBuy;
     }
 
-    public void buyProductPackage(ProductPackage ... productPackages)
+    public void buyProductPackage(ProductPackage... productPackages)
             throws NoSuchProductPackageFound, NotEnoughProductQuantity {
         List<ProductPackage> productPackageList = Arrays.asList(productPackages);
-        for(ProductPackage curPack : productPackageList) {
-            if(!isContainEnoughProducts(curPack)) {
+        for (ProductPackage curPack : productPackageList) {
+            if (!isContainEnoughProducts(curPack)) {
                 throw new NotEnoughProductQuantity();
             }
             getProductPackage(curPack.getProduct()).getProductPackage().setProductQuantity
@@ -87,38 +94,38 @@ public class Shop {
                     curCost += getProductPackage(productPackage.getProduct()).getProductPrice()
                             * productPackage.getQuantity();
                 }
-        if(curCost != 0)
+        if (curCost != 0)
             return curCost;
         else
             throw new NoSuchProductPackageFound();
     }
 
     public PricedProductPackage getProductPackage(Product product) {
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPackage().getProduct().getProductID() == product.getProductID())
+        for (PricedProductPackage item : productList) {
+            if (item.getProductPackage().getProduct().getProductID() == product.getProductID())
                 return item;
         }
         return null;
     }
 
     public PricedProductPackage getPricedProductPackage(Product product) throws NoSuchShopFound {
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPackage().getProduct().getProductID() == product.getProductID())
+        for (PricedProductPackage item : productList) {
+            if (item.getProductPackage().getProduct().getProductID() == product.getProductID())
                 return item;
         }
         throw new NoSuchShopFound();
     }
 
     public boolean containsProductPackageCollection(List<ProductPackage> productPackageList) {
-        for(ProductPackage item : productPackageList) {
-            if(!isContainProduct(item.getProduct()))
+        for (ProductPackage item : productPackageList) {
+            if (!isContainProduct(item.getProduct()))
                 return false;
         }
         return true;
     }
 
-    public boolean isContainEnoughProducts(ProductPackage productPackage) throws NoSuchProductPackageFound{
-        if(!isContainProduct(productPackage.getProduct())) {
+    public boolean isContainEnoughProducts(ProductPackage productPackage) throws NoSuchProductPackageFound {
+        if (!isContainProduct(productPackage.getProduct())) {
             throw new NoSuchProductPackageFound();
         }
         return getProductPackage(productPackage.getProduct()).getProductPackage().getQuantity()
@@ -126,8 +133,8 @@ public class Shop {
     }
 
     public boolean isContainProduct(Product product) {
-        for(PricedProductPackage item : productList) {
-            if(item.getProductPackage().getProduct().getProductID() == product.getProductID())
+        for (PricedProductPackage item : productList) {
+            if (item.getProductPackage().getProduct().getProductID() == product.getProductID())
                 return true;
         }
         return false;

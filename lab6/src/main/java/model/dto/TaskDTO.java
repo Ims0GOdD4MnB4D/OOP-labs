@@ -2,8 +2,6 @@ package model.dto;
 
 import javafx.util.Pair;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import model.task.TaskState;
 
 import java.time.Instant;

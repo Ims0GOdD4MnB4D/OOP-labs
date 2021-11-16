@@ -14,6 +14,7 @@ public class HibernateUtil {
     private static SessionFactory sessionFactory = buildSessionFactory();
     @Getter
     private static final Session session = getSessionFactory().openSession();
+
     private static SessionFactory buildSessionFactory() {
         try {
             if (sessionFactory == null) {

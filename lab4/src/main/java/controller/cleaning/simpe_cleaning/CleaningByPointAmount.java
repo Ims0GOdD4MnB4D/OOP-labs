@@ -11,15 +11,15 @@ public class CleaningByPointAmount implements AbstractSimpleCleaningAlgorithm {
 
     @Override
     public void clean(Backup backup) {
-        while(isCleaningNeeded(backup)) {
-                backup.deleteRestorePoint
-                        (backup.getRpList().get(0).getRpId());
+        while (isCleaningNeeded(backup)) {
+            backup.deleteRestorePoint
+                    (backup.getRpList().get(0).getRpId());
         }
     }
 
     @Override
     public boolean isCleaningNeeded(Backup backup) {
-        if(backup.getRpList().isEmpty())
+        if (backup.getRpList().isEmpty())
             return false;
         return backup.getRpList().size() > rpAmount;
     }

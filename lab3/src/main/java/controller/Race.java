@@ -6,23 +6,27 @@ import model.AirVehicle;
 import model.LandVehicle;
 import model.VehicleType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class Race {
     private final float distance;
-    private final List <VehicleType> raceMembers = new ArrayList<>();
+    private final List<VehicleType> raceMembers = new ArrayList<>();
 
     public static class Builder {
         private float distance;
-        private List <LandVehicle> landRace = new ArrayList<>();
-        private List <AirVehicle> airRace = new ArrayList<>();
+        private List<LandVehicle> landRace = new ArrayList<>();
+        private List<AirVehicle> airRace = new ArrayList<>();
 
         public Builder landRace(LandVehicle... landVehicles) {
             landRace = Arrays.asList(landVehicles);
             return this;
         }
 
-        public Builder airRace(AirVehicle ... airVehicles) {
+        public Builder airRace(AirVehicle... airVehicles) {
             airRace = Arrays.asList(airVehicles);
             return this;
         }
@@ -44,9 +48,9 @@ public class Race {
     }
 
     public VehicleType startRace() throws InvalidDistance {
-        if(distance <= 0)
+        if (distance <= 0)
             throw new InvalidDistance();
-        if(!raceMembers.isEmpty())
+        if (!raceMembers.isEmpty())
             return commonRace();
         throw new NoVehiclesFound();
     }

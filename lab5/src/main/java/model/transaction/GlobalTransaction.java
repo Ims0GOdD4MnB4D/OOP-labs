@@ -5,7 +5,7 @@ import model.account.Account;
 import model.bank.Bank;
 
 @Getter
-public class GlobalTransaction extends Transaction{
+public class GlobalTransaction extends Transaction {
     private final Bank fromBank;
     private final Bank toBank;
 

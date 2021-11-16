@@ -14,7 +14,7 @@ public class YeezyBoost extends LandVehicle {
 
     @Override
     protected float getRestDuration(int curPoint) {
-        if(curPoint == 1)
+        if (curPoint == 1)
             return 10;
         else
             return 5;

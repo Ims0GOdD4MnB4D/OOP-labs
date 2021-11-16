@@ -10,7 +10,7 @@ public class ReportMapper {
     public static Report convertToEntity(ReportDTO dto) {
         Report report = new Report();
         report.setReportId(dto.getReportId());
-        for(TaskDTO taskDTO : dto.getReportedTasks())
+        for (TaskDTO taskDTO : dto.getReportedTasks())
             report.addTask(TaskMapper.convertToEntity(taskDTO));
         report.setComment(dto.getComment());
         report.setState(dto.getState());
@@ -26,7 +26,7 @@ public class ReportMapper {
         dto.setComment(entity.getComment());
         dto.setExecutorId(entity.getExecutorId());
         dto.setDeadline(entity.getDeadline());
-        for(Task item : entity.getReportedTasks())
+        for (Task item : entity.getReportedTasks())
             dto.addTask(TaskMapper.convertToDTO(item));
         return dto;
     }

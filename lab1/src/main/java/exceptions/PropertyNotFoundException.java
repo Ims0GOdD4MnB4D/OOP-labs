@@ -1,6 +1,6 @@
 package exceptions;
 
-public class PropertyNotFoundException extends Exception{
+public class PropertyNotFoundException extends Exception {
 
     public PropertyNotFoundException() {
 

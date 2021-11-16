@@ -7,6 +7,7 @@ import java.util.List;
 
 public class RestorePointDefault extends RestorePoint {
     private int dependencies = 0;
+
     public RestorePointDefault(String directoryPath) {
         super(directoryPath);
     }
@@ -24,7 +25,7 @@ public class RestorePointDefault extends RestorePoint {
     }
 
     public void decrementDependency() {
-        if(dependencies > 0)
+        if (dependencies > 0)
             --dependencies;
     }
 

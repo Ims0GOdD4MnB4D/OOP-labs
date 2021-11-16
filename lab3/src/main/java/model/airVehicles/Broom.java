@@ -12,8 +12,8 @@ public class Broom extends AirVehicle {
 
     @Override
     protected float cuttedDistance(float distance) {
-        if(distance > 1000)
-            return distance/100000 * distance;
+        if (distance > 1000)
+            return distance / 100000 * distance;
         else
             return 0;
     }

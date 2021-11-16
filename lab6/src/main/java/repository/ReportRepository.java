@@ -11,7 +11,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.UUID;
 
-public class ReportRepository implements EntityRepository <Report> {
+public class ReportRepository implements EntityRepository<Report> {
     private final ServiceDB serviceDB;
 
     public ReportRepository(ServiceDB serviceDB) {

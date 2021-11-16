@@ -19,9 +19,9 @@ public class DepositAccount extends Account {
     public DepositAccount(Client client, int money, LocalDateTime term) {
         super(client, money);
         this.term = term;
-        if(balance < 50000)
+        if (balance < 50000)
             interestRate = 3.0;
-        else if(balance <= 100000)
+        else if (balance <= 100000)
             interestRate = 3.5;
         else
             interestRate = 4.0;
@@ -35,7 +35,7 @@ public class DepositAccount extends Account {
 
     @Override
     public void addMoney(double moneyAmount) {
-        if(moneyAmount <= 0) {
+        if (moneyAmount <= 0) {
             throw new IllegalMoneyAmountException();
         }
         refreshBalance();
@@ -45,24 +45,24 @@ public class DepositAccount extends Account {
     @Override
     public void withdrawMoney(double moneyAmount) {
         refreshBalance();
-        if(!isWithdrawAvailable())
+        if (!isWithdrawAvailable())
             return;
-        if(moneyAmount <= 0) {
+        if (moneyAmount <= 0) {
             throw new IllegalMoneyAmountException();
         }
-        if(balance < moneyAmount)
+        if (balance < moneyAmount)
             throw new TryingGetMoreMoneyThanActualException();
         balance -= moneyAmount;
     }
 
     private void refreshBalance() {
         long daysRemainder = ChronoUnit.DAYS.between(LocalDateTime.now(), curTime);
-        if(daysRemainder == 0)
+        if (daysRemainder == 0)
             return;
-        for(int i=0; i<daysRemainder; ++i) {
-            remainder += (remainder + balance) * interestRate/100/365;
+        for (int i = 0; i < daysRemainder; ++i) {
+            remainder += (remainder + balance) * interestRate / 100 / 365;
         }
-         if(ChronoUnit.MONTHS.between(LocalDateTime.now(), curTime) != 0) {
+        if (ChronoUnit.MONTHS.between(LocalDateTime.now(), curTime) != 0) {
             balance = balance + remainder;
             remainder = 0;
         }

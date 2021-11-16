@@ -16,11 +16,11 @@ public class BankManager implements AbstractBankManager {
     private List<Bank> banks = new ArrayList<>();
     private final List<GlobalTransaction> transactions = new ArrayList<>();
 
-    public BankManager(List <Bank> banks) {
+    public BankManager(List<Bank> banks) {
         this.banks.addAll(banks);
     }
 
-    public BankManager(Bank ... banks) {
+    public BankManager(Bank... banks) {
         this.banks = Arrays.asList(banks);
     }
 
@@ -37,17 +37,17 @@ public class BankManager implements AbstractBankManager {
 
     @Override
     public void transfer(UUID fromBank, UUID toBank, double moneyAmount) {
-        if(!banks.contains(bankByAccId(fromBank))
+        if (!banks.contains(bankByAccId(fromBank))
                 || !banks.contains(bankByAccId(toBank))) {
             throw new AccountNotFoundException();
         }
-        
+
         banks.forEach(bank -> {
             //Verification is carried out using by UUID so no 'find' methods valid here
-            if(bank.accExists(fromBank)) {
+            if (bank.accExists(fromBank)) {
                 bank.findAccById(fromBank).withdrawMoney(moneyAmount);
             }
-            if(bank.accExists(toBank)) {
+            if (bank.accExists(toBank)) {
                 bank.findAccById(toBank).addMoney(moneyAmount);
             }
         });
@@ -60,8 +60,8 @@ public class BankManager implements AbstractBankManager {
 
     @Override
     public void cancelTransaction(UUID transferId) {
-        for(int i=0; i<transactions.size(); ++i) {
-            if(transactions.get(i).getTransferId().equals(transferId)) {
+        for (int i = 0; i < transactions.size(); ++i) {
+            if (transactions.get(i).getTransferId().equals(transferId)) {
                 transactions.get(i).cancelTransaction();
                 transactions.remove(transactions.get(i));
             }

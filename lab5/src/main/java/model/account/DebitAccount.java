@@ -1,13 +1,14 @@
 package model.account;
 
-import exception.TryingGetMoreMoneyThanActualException;
 import exception.IllegalMoneyAmountException;
+import exception.TryingGetMoreMoneyThanActualException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import model.client.Client;
-import java.time.temporal.ChronoUnit;
+
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Getter
 public class DebitAccount extends Account {
@@ -31,10 +32,10 @@ public class DebitAccount extends Account {
     @Override
     public void withdrawMoney(double moneyAmount) {
         refreshBalance();
-        if(moneyAmount <= 0) {
+        if (moneyAmount <= 0) {
             throw new IllegalMoneyAmountException();
         }
-        if(balance < moneyAmount)
+        if (balance < moneyAmount)
             throw new TryingGetMoreMoneyThanActualException();
         balance -= moneyAmount;
     }
@@ -42,7 +43,7 @@ public class DebitAccount extends Account {
     @Override
     public void addMoney(double moneyAmount) {
         refreshBalance();
-        if(moneyAmount <= 0) {
+        if (moneyAmount <= 0) {
             throw new IllegalMoneyAmountException();
         }
         balance += moneyAmount;
@@ -50,13 +51,13 @@ public class DebitAccount extends Account {
 
     private void refreshBalance() {
         long daysRemainder = ChronoUnit.DAYS.between(LocalDateTime.now(), curTime);
-        if(daysRemainder == 0)
+        if (daysRemainder == 0)
             return;
-        for(int i=0; i<daysRemainder; ++i) {
-            remainder += (remainder + balance) * interestRate/100/365;
+        for (int i = 0; i < daysRemainder; ++i) {
+            remainder += (remainder + balance) * interestRate / 100 / 365;
         }
         curTime = LocalDateTime.now();
-        if(ChronoUnit.MONTHS.between(LocalDateTime.now(), curTime) != 0) {
+        if (ChronoUnit.MONTHS.between(LocalDateTime.now(), curTime) != 0) {
             balance = balance + remainder;
             remainder = 0;
         }

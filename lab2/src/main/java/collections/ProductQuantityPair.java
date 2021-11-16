@@ -5,8 +5,8 @@ import model.Product;
 import java.util.Objects;
 
 public class ProductQuantityPair {
-        private Product key;
-        private Integer value;
+    private Product key;
+    private Integer value;
 
 
     public ProductQuantityPair(Product key, Integer value) {

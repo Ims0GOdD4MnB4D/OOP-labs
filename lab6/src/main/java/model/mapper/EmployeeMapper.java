@@ -17,11 +17,11 @@ public class EmployeeMapper {
         employee.setHead(dto.getHead());
         employee.setTeamlead(dto.getTeamlead());
         employee.setReportDraft(ReportMapper.convertToEntity(dto.getReportDraft()));
-        for(ReportDTO item : dto.getReportList())
+        for (ReportDTO item : dto.getReportList())
             employee.addReport(ReportMapper.convertToEntity(item));
-        for(TaskDTO item : dto.getTaskList())
+        for (TaskDTO item : dto.getTaskList())
             employee.addTask(TaskMapper.convertToEntity(item));
-        for(EmployeeDTO item : dto.getEmployeeList())
+        for (EmployeeDTO item : dto.getEmployeeList())
             employee.addEmployee(convertToEntity(item));
         return employee;
     }
@@ -33,11 +33,11 @@ public class EmployeeMapper {
         dto.setHead(entity.getHead());
         dto.setTeamlead(entity.getTeamlead());
         dto.setReportDraft(ReportMapper.convertToDTO(entity.getReportDraft()));
-        for(Report item : entity.getReportList())
+        for (Report item : entity.getReportList())
             dto.addReport(ReportMapper.convertToDTO(item));
-        for(Task item : entity.getTaskList())
+        for (Task item : entity.getTaskList())
             dto.addTask(TaskMapper.convertToDTO(item));
-        for(Employee item : entity.getEmployeeList())
+        for (Employee item : entity.getEmployeeList())
             dto.addEmployee(convertToDTO(item));
         return dto;
     }

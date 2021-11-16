@@ -1,8 +1,6 @@
 package model.mapper;
 
 import model.dto.TaskDTO;
-import model.manager.ReportManager;
-import model.manager.TaskManager;
 import model.task.Task;
 
 public class TaskMapper {
@@ -19,6 +17,7 @@ public class TaskMapper {
         task.setSprint(dto.isSprint());
         return task;
     }
+
     public static TaskDTO convertToDTO(Task entity) {
         TaskDTO dto = new TaskDTO();
         dto.setTaskId(entity.getTaskId());

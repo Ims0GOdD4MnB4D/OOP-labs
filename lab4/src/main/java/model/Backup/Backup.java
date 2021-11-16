@@ -9,21 +9,25 @@ import model.RestorePoint.RestorePointIncremental;
 import model.RestorePoint.RestorePointInfo;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 
 public class Backup implements AbstractBackup {
 
     private final List<RestorePoint> rpList;
-    private final List<File> backupStorage;
+    private final ArrayList backupStorage;
     private final List<RestorePointInfo> curRestorePoints;
     private final UUID backupId;
     private Integer restorePointsSize;
 
     public Backup(File dir) {
-        if(!dir.exists())
+        if (!dir.exists())
             throw new DirectoryNotFoundException(dir.toString());
-        if(Objects.requireNonNull(dir.list()).length == 0)
+        if (Objects.requireNonNull(dir.list()).length == 0)
             throw new DirectoryEmptyException(dir);
         rpList = new ArrayList<>();
         curRestorePoints = new ArrayList<>();
@@ -34,7 +38,7 @@ public class Backup implements AbstractBackup {
 
     @Override
     public void addRestorePoint(RestorePoint restorePoint) {
-        if(restorePoint instanceof RestorePointDefault)
+        if (restorePoint instanceof RestorePointDefault)
             addRestorePointDefault(restorePoint);
         else
             addRestorePointIncremental(restorePoint);
@@ -42,7 +46,7 @@ public class Backup implements AbstractBackup {
     }
 
     public void addFile(File newFile) {
-        if(newFile.isDirectory())
+        if (newFile.isDirectory())
             backupStorage.addAll(Arrays.asList(Objects.requireNonNull(newFile.listFiles())));
         else
             backupStorage.add(newFile);
@@ -50,7 +54,7 @@ public class Backup implements AbstractBackup {
 
     public void removeFile(File rmFile) {
         backupStorage.forEach(file -> {
-            if(file.equals(rmFile)) {
+            if (file.equals(rmFile)) {
                 backupStorage.remove(file);
             }
         });
@@ -62,9 +66,9 @@ public class Backup implements AbstractBackup {
     }
 
     private void addRestorePointIncremental(RestorePoint restorePoint) {
-        if(rpList.size() < 1)
+        if (rpList.size() < 1)
             throw new FirstPointIncrementalException();
-        for(int i=rpList.size()-1; i>=0; --i) {
+        for (int i = rpList.size() - 1; i >= 0; --i) {
             if (rpList.get(i) instanceof RestorePointDefault) {
                 rpList.add(countDelta(restorePoint, rpList.get(i)));
                 ((RestorePointIncremental) rpList.get(rpList.size() - 1))
@@ -85,15 +89,14 @@ public class Backup implements AbstractBackup {
 
     @Override
     public void deleteRestorePoint(UUID rpId) {
-        for(RestorePoint item : rpList) {
-            if(rpId.equals(item.getRpId())) {
-                if(item instanceof RestorePointIncremental) {
+        for (RestorePoint item : rpList) {
+            if (rpId.equals(item.getRpId())) {
+                if (item instanceof RestorePointIncremental) {
                     restorePointsSize -= item.getRestorePointSize();
                     ((RestorePointIncremental) item).getDependent().decrementDependency();
                     rpList.remove(item);
                     return;
-                }
-                else if(((RestorePointDefault)item).getDependency() == 0) {
+                } else if (((RestorePointDefault) item).getDependency() == 0) {
                     restorePointsSize -= item.getRestorePointSize();
                     rpList.remove(item);
                     return;
@@ -104,7 +107,7 @@ public class Backup implements AbstractBackup {
 
     public void replacePoints(List<RestorePoint> newRpList) {
         this.rpList.clear();
-        for(RestorePoint item : newRpList) {
+        for (RestorePoint item : newRpList) {
             addRestorePoint(item);
         }
     }

@@ -1,5 +1,10 @@
 import controller.ShopManager;
-import exceptions.*;
+import exceptions.InvalidPrice;
+import exceptions.InvalidProductQuantity;
+import exceptions.NoSuchProductFound;
+import exceptions.NoSuchProductPackageFound;
+import exceptions.NoSuchShopFound;
+import exceptions.NotEnoughProductQuantity;
 import model.PricedProductPackage;
 import model.Product;
 import model.ProductPackage;
@@ -23,12 +28,12 @@ public class ShopTest {
     }
 
     @Test
-    public void getTheCheapestPriceTesting() throws InvalidProductQuantity, InvalidPrice, NoSuchProductFound {
+    public void getTheCheapestPriceTesting() throws InvalidProductQuantity, InvalidPrice {
         Product yeezyBoost = new Product("yeezy");
         Product airJordanLow = new Product("jordan");
         Product dunkTravis = new Product("travis");
         Shop houseOfLeningradTrade = new Shop("ДЛТ", "Конюшенная ул., 21–23");
-        Shop centralDepartmentStore = new Shop("ЦУМ","Петровка ул., 2");
+        Shop centralDepartmentStore = new Shop("ЦУМ", "Петровка ул., 2");
         centralDepartmentStore.addProduct(yeezyBoost, 299, 20);
         centralDepartmentStore.addProduct(airJordanLow, 499, 15);
         houseOfLeningradTrade.addProduct(yeezyBoost, 299, 20);
@@ -37,7 +42,7 @@ public class ShopTest {
         ShopManager manager = new ShopManager(centralDepartmentStore, houseOfLeningradTrade);
         String expected = "ДЛТ";
         String actual = manager.getTheCheapestPrice(yeezyBoost).getName();
-        
+
         Assert.assertEquals(expected, actual);
     }
 
@@ -55,7 +60,7 @@ public class ShopTest {
 
     @Test
     public void getShopWithLeastCostTesting() throws InvalidProductQuantity, InvalidPrice, NoSuchShopFound, NoSuchProductPackageFound {
-        Shop centralDepartmentStore = new Shop("ЦУМ","Петровка ул., 2");
+        Shop centralDepartmentStore = new Shop("ЦУМ", "Петровка ул., 2");
         Shop houseOfLeningradTrade = new Shop("ДЛТ", "Конюшенная ул., 21–23");
         Product yeezyBoost = new Product("yeezy");
         Product airJordanLow = new Product("jordan");

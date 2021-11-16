@@ -1,12 +1,10 @@
 package controller.BackupManager;
 
 import controller.cleaning.AbstractCleaningAlgorithm;
-import controller.cleaning.simpe_cleaning.AbstractSimpleCleaningAlgorithm;
 import controller.creating.AbstractCreatingAlgorithm;
-import controller.cleaning.hybrid.AbstractHybridAlgorithm;
 import model.Backup.Backup;
 
-public class BackupManager implements AbstractBackupManager{
+public class BackupManager implements AbstractBackupManager {
     private final Backup backup;
     private AbstractCreatingAlgorithm creatingAlgorithm;
     private AbstractCleaningAlgorithm cleaningAlgorithm;
@@ -48,17 +46,17 @@ public class BackupManager implements AbstractBackupManager{
     }
 
     public void activateCleaningAlgorithm() {
-        if(cleaningAlgorithm != null)
+        if (cleaningAlgorithm != null)
             cleaningAlgorithm.clean(backup);
     }
 
     public void activateCreatingDefaultRPAlgorithm() {
-        if(creatingAlgorithm != null)
+        if (creatingAlgorithm != null)
             creatingAlgorithm.createRestorePointDefault(backup);
     }
 
     public void activateCreatingIncrementalRPAlgorithm() {
-        if(creatingAlgorithm != null)
+        if (creatingAlgorithm != null)
             creatingAlgorithm.createRestorePointIncremental(backup);
     }
 

@@ -30,7 +30,7 @@ public class CreditAccount extends Account {
     @Override
     public void addMoney(double moneyAmount) {
         refreshBalance();
-        if(moneyAmount <= 0) {
+        if (moneyAmount <= 0) {
             throw new IllegalMoneyAmountException();
         }
         balance += moneyAmount;
@@ -39,10 +39,10 @@ public class CreditAccount extends Account {
     @Override
     public void withdrawMoney(double moneyAmount) {
         refreshBalance();
-        if(moneyAmount <= 0) {
+        if (moneyAmount <= 0) {
             throw new IllegalMoneyAmountException();
         }
-        if(balance - moneyAmount < creditLimit)
+        if (balance - moneyAmount < creditLimit)
             throw new OutOfCreditLimitException();
         balance -= moneyAmount;
     }
@@ -53,9 +53,9 @@ public class CreditAccount extends Account {
 
     private void refreshBalance() {
         long monthsCommission = ChronoUnit.MONTHS.between(LocalDateTime.now(), curTime);
-        if(monthsCommission == 0 || !isCommissionActive())
+        if (monthsCommission == 0 || !isCommissionActive())
             return;
-        for(int i=0; i<monthsCommission; ++i) {
+        for (int i = 0; i < monthsCommission; ++i) {
             balance -= commission;
         }
         curTime = LocalDateTime.now();
